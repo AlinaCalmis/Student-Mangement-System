@@ -22,14 +22,14 @@ insert into students values(1018, '1980531000004', 'Ghenadie', 'Caraman', to_dat
 insert into students values(1019, '2990312000003', 'Andreea', 'Laurentiu', to_date('12-03-1999', 'dd-MM-yyyy'), '+4079514000', 'andylaur1@gmail.com','student','Romania, Bucuresti, Piata Iancu 109', 'female', to_date('24-07-2018', 'dd-MM-yyyy'), 4, 1); 
 insert into students values(1015, '1010801111112', 'Marian', 'Cristescu', to_date('01-08-2001', 'dd-MM-yyyy'), '+40756565656', 'cristescu.marian@gmail.com','student','Romania, Bucuresti, Piata Alba Iulia 3, ap65', 'male', to_date('28-07-2020', 'dd-MM-yyyy'), 2, 1); 
 
-insert into professors values(0, '2840321786609', 'Irina', 'Mocanu', to_date('21-03-1984', 'dd-MM-yyyy'), '+40746338906', 'irina.mocanu@cs.pub.ro', 'professor', 'female', 1);
-insert into professors values(1, '1741011000291', 'Alin Dragos Bogdan', 'Moldoveanu', to_date('11-10-1974', 'dd-MM-yyyy'), '+40709283372', 'alin.moldoveanu@cs.pub.ro', 'professor', 'male', 1);
-insert into professors values(2, '1720809211541', 'Ciprian Octavian', 'Truica', to_date('09-08-1972', 'dd-MM-yyyy'), '+4076534221', 'ciprian.truica@cs.pub.ro', 'professor', 'male', 1);
-insert into professors values(3, '1851001562649', 'Mihai', 'Carabas', to_date('01-10-1985', 'dd-MM-yyyy'), '+40746626182', 'imihai.carabas@cs.pub.ro', 'professor', 'male', 1);
-insert into professors values(4, '1841212546836', 'Traian', 'Rebedea', to_date('12-12-1984', 'dd-MM-yyyy'), '+40764736281', 'traian.rebedea@cs.pub.ro', 'professor', 'male', 1);
-insert into professors values(5, '1820609448594', 'Matei', 'Popovici', to_date('09-06-1982', 'dd-MM-yyyy'), '+40715415653', 'matei.popovici@cs.pub.ro', 'professor', 'male', 1);
-insert into professors values(6, '1610111265478', 'Cornel', 'Popescu', to_date('11-01-1961', 'dd-MM-yyyy'), '+40756264552', 'cornel.pop@cs.pub.ro', 'professor', 'male', 1);
-insert into professors values(7, '1750111546878', 'Marios', 'Choudary', to_date('14-11-1975', 'dd-MM-yyyy'), '+40746338322', 'marioschoudary@cs.pub.ro', 'professor', 'male', 1);
+insert into professors values(0, '2840321786609', 'Irina', 'Mocanu', to_date('21-03-1984', 'dd-MM-yyyy'), '+40746338906', 'irina.mocanu@cs.pub.ro', 'professor', 'female', 2);
+insert into professors values(1, '1741011000291', 'Alin Dragos Bogdan', 'Moldoveanu', to_date('11-10-1974', 'dd-MM-yyyy'), '+40709283372', 'alin.moldoveanu@cs.pub.ro', 'professor', 'male', 2);
+insert into professors values(2, '1720809211541', 'Ciprian Octavian', 'Truica', to_date('09-08-1972', 'dd-MM-yyyy'), '+4076534221', 'ciprian.truica@cs.pub.ro', 'professor', 'male', 2);
+insert into professors values(3, '1851001562649', 'Mihai', 'Carabas', to_date('01-10-1985', 'dd-MM-yyyy'), '+40746626182', 'imihai.carabas@cs.pub.ro', 'professor', 'male', 2);
+insert into professors values(4, '1841212546836', 'Traian', 'Rebedea', to_date('12-12-1984', 'dd-MM-yyyy'), '+40764736281', 'traian.rebedea@cs.pub.ro', 'professor', 'male', 2);
+insert into professors values(5, '1820609448594', 'Matei', 'Popovici', to_date('09-06-1982', 'dd-MM-yyyy'), '+40715415653', 'matei.popovici@cs.pub.ro', 'professor', 'male', 2);
+insert into professors values(6, '1610111265478', 'Cornel', 'Popescu', to_date('11-01-1961', 'dd-MM-yyyy'), '+40756264552', 'cornel.pop@cs.pub.ro', 'professor', 'male', 2);
+insert into professors values(7, '1750111546878', 'Marios', 'Choudary', to_date('14-11-1975', 'dd-MM-yyyy'), '+40746338322', 'marioschoudary@cs.pub.ro', 'professor', 'male', 2);
 
 insert into courses values(0, 'Sisteme de Operare', 5, 15);
 insert into courses values(1, 'Inteligenta Artificiala', 6, 12);
@@ -41,6 +41,8 @@ insert into courses values(6, 'Limbaje Formale si Automate', 5, 14);
 insert into courses values(7, 'Proiectarea Algoritmilor', 5, 15);
 insert into courses values(8, 'Sisteme cu Microprocesoare', 4, 10);
 insert into courses values(9, 'Sisteme de Operare 2', 5, 15);
+
+insert into admins values('0', 'admin');
 
 select * from departments;
 select * from students;

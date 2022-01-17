@@ -1,119 +1,133 @@
 create or replace package functions_pck
 as
+    ----------- Checks whether a student exists or not---------
+    function isUserRegistered(userId in number) return boolean;
+    ----------- Check credentials -----------------------------
+    function checkPasswd(userId in number, passwd in varchar2) return boolean;
+    ----------- Check user type(user is logged in)-------------
+    function userType(uid in number) return varchar2;
     ----------- Get Student Personal DATA------------
-    type pers_stud_data_rec is record(
-            f_name varchar2(50),
-            l_name varchar2(50),
-            study_year number(1),
-            birth_date DATE,
-            phone varchar2(12),
-            email varchar2(50),
-            dept_name varchar2(50));
-
-    type pers_stud_data is varray(1) of pers_stud_data_rec;
---/
-    function getStudentPersonalData(st_id in number) return pers_stud_data;
-    
-    type prof_data_rec is record(
-        f_name varchar2(50),
-        l_name varchar2(50),
-        birth_date DATE,
-        phone varchar2(12),
-        email varchar2(50),
-        dept_name varchar2(50));
-        
-    type prof_data is varray(1) of prof_data_rec;
-    
-    function getProfessorData(p_id in number) return prof_data;
+    function getStudentData(studId in number, fullN out varchar2, phone out varchar2, 
+                         email out varchar2, addr out varchar2, sex out varchar2, y out number) return varchar2;
+    ----------- Get Proessors Data ------------------
+    function getProfData(profid in number, fullN out varchar2, phone out varchar2, 
+                         email out varchar2) return varchar2;
 end functions_pck;
 /
 
 create or replace package body functions_pck
 as
-    function getStudentPersonalData(st_id in number) return pers_stud_data
+    
+    function isUserRegistered(userId in number) return boolean
     as 
-        stud pers_stud_data:= pers_stud_data();
-        
-        f varchar2(50);
-        l varchar2(50);
-        sy number(1);
-        bd DATE;
-        ph varchar2(12);
-        e varchar2(50);
-        dn varchar2(50);
+        cursor usersC is
+            select stud_id from students
+            union
+            select prof_id from professors;
+        cursor adminC is
+        select user_id from admins;
     begin
+    
+        for ad in adminC
+        loop
+            if ad.user_id = userId then
+                return true;
+            end if;
+        end loop;
         
-        select f_name,l_name,study_year, birth_date, phone, email, d.dept_name
-        into f,l,sy,bd,ph,e,dn
-        from students s join departments d on d.dept_id = s.dept_id
-        where stud_id = st_id;
+        for us in usersC
+        loop
+            if us.stud_id = userId then
+                return true;
+            end if;
+        end loop;
         
-        stud.extend;
-        stud(1) :=  pers_stud_data_rec(null,null,null,null,null,null,null);
-        stud(1).f_name :=f;
-        stud(1).l_name :=l;
-        stud(1).study_year := sy;
-        stud(1).birth_date :=bd;
-        stud(1).phone :=ph;
-        stud(1).email :=e;
-        stud(1).dept_name :=dn;
         
-        return stud;
+        exception 
+            when no_data_found then
+                return false;
+    end;
+    
+    function checkPasswd(userId in number, passwd in varchar2) return boolean
+    as
+        cursor passwords is
+        select stud_id, pass from students
+        union
+        select prof_id, pass from professors;
         
-    exception
+        cursor adminsC is
+        select * from admins;
+        
+        nothing_detected exception;
+    begin
+        for us in passwords
+        loop
+            if us.stud_id = userID and us.pass = passwd then
+                return true;
+            end if;
+        end loop;
+        
+        for ad in adminsC
+        loop
+            if ad.user_id = userId and ad.pass = passwd then
+                return true;
+            end if;
+        end loop;
+        
+        raise nothing_detected;
+        
+        exception 
+            when nothing_detected then
+                return false;
+                
+--        return false;
+    end;
+    
+    function userType(uid in number) return varchar2
+    as
+    begin
+        if uid > 1000 then
+            return 'student';
+        elsif uid = 0 then
+                return 'admin';
+        else 
+            return 'professor';
+        end if;
+    end;
+
+    function getStudentData(studId in number, fullN out varchar2, phone out varchar2, 
+                         email out varchar2, addr out varchar2, sex out varchar2, y out number) return varchar2
+    as 
+        deptN departments.dept_name%type;
+    begin
+        select f_name||' '||l_name, phone, email, address, gender, study_year, d.dept_name
+        into fullN, phone, email, addr, sex, y, deptN
+        from students s join departments d on s.dept_id = d.dept_id
+        where studId = stud_id;
+        
+        return deptN;
+        
+        exception
         when no_data_found then
             raise_application_error(-20001, 'STUDENT_NOT_FOUND');
-        
-    end getStudentPersonalData;
+    end;
     
-    
-    ------------- GET PROF PERSONAL DATA -------------------
-    --drop TYPE prof_data;
-    
---    create or replace type prof_data_rec as object(
---        f_name varchar2(50),
---        l_name varchar2(50),
---        birth_date DATE,
---        phone varchar2(12),
---        email varchar2(50),
---        dept_name varchar2(50));
---    /
---    create or replace type prof_data as varray(1) of prof_data_rec;
---    /
-    
-    function getProfessorData(p_id in number) return prof_data
+    function getProfData(profid in number, fullN out varchar2, phone out varchar2, 
+                         email out varchar2) return varchar2
     as 
-        prof prof_data:= prof_data();
-        
-        f varchar2(50);
-        l varchar2(50);
-        bd DATE;
-        ph varchar2(12);
-        e varchar2(50);
-        dn varchar2(50);
+        deptN departments.dept_name%type;
     begin
+        select f_name||' '||l_name, phone, email, d.dept_name
+        into fullN, phone, email, deptN
+        from professors p join departments d on p.dept_id = d.dept_id
+        where profid = prof_id;
         
-        select f_name,l_name, birth_date, phone, email, d.dept_name
-        into f,l,bd,ph,e,dn
-        from professors p join departments d on d.dept_id = p.dept_id
-        where prof_id = p_id;
+        return deptN;
         
-        prof.extend;
-        prof(1) :=  prof_data_rec(null,null,null,null,null,null);
-        prof(1).f_name :=f;
-        prof(1).l_name :=l;
-        prof(1).birth_date :=bd;
-        prof(1).phone :=ph;
-        prof(1).email :=e;
-        prof(1).dept_name :=dn;
-        
-        return prof;
-        
-    exception
+        exception
         when no_data_found then
             raise_application_error(-20002, 'PROFESSOR_NOT_FOUND');
-        
-    end getProfessorData;
+    end;
     
 end functions_pck;
 /

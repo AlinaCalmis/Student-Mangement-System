@@ -1,3 +1,15 @@
+drop SEQUENCE sidInsert;
+drop SEQUENCE pidInsert;
+drop SEQUENCE depidInsert;
+drop SEQUENCE courseidInsert;
+
+drop trigger studPass;
+drop trigger studInsert;
+drop trigger profInsert;
+drop trigger depInsert;
+drop trigger courseInsert;
+
+
 create sequence sidInsert
 increment by 1
 minvalue 1001

@@ -37,7 +37,10 @@ as
                                       credit_pts in number,
                                       units in number
                                       );
-                                      
+    procedure loginUser(user_id in number);
+    
+    procedure logoutUser(user_id in number);
+    
     procedure removeCourse(c_id in number);
     
     procedure removeDepartment(d_id in number);
@@ -47,6 +50,8 @@ as
     procedure removeStudent(s_id in number);
     
     procedure removeStudRecord(s_id in number, c_id in number);
+        
+    procedure showCourses(sys_ref out sys_refcursor);
     
 end procedures_pck;
 /
@@ -112,6 +117,18 @@ as
         insert into courses values(course_id, course_name, credit_pts, units);
     end;
     
+    procedure loginUser(user_id in number)
+    is
+    begin
+        insert into logedin values(user_id);
+    end;
+    
+    procedure logoutUser(user_id in number)
+    is
+    begin
+        delete from logedin where user_id=user_id;
+    end;
+    
     
     ------ remove -----
     procedure removeCourse(c_id in number)
@@ -148,6 +165,12 @@ as
     begin
         delete from student_records
         where stud_id = s_id and course_id = c_id;
+    end;
+
+    procedure showCourses(sys_ref out sys_refcursor)
+    is
+    begin
+        open sys_ref  for select * from courses;
     end;
 
 end procedures_pck;

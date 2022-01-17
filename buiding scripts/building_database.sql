@@ -1,9 +1,11 @@
+drop table logedin;
 drop table student_records;
 drop table given_courses;
 drop table courses;
 drop table students;
 drop table professors;
 drop table departments;
+drop table admins;
 
 create table students(
     stud_id number(10) constraint stud_id_nn not null,
@@ -80,7 +82,16 @@ alter table student_records add(
     constraint recc_id_fk foreign key(course_id) references courses(course_id)
 );
 
+create table logedin(
+    user_id number(10),
+    constraint li_pk primary key(user_id)
+);
 
+create table admins(
+    user_id number(10),
+    pass varchar2(10),
+    constraint u_pk primary key(user_id)
+);
 
 --create sequence sidInsert
 --increment by 1
