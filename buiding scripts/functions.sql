@@ -12,6 +12,13 @@ as
     ----------- Get Proessors Data ------------------
     function getProfData(profid in number, fullN out varchar2, phone out varchar2, 
                          email out varchar2) return varchar2;
+                         
+    function doCountProfInDept(d_id in number, sys_ref out sys_refcursor)
+                                return integer;
+    function doCountStudentsInDept(d_id in number)return integer;
+    
+    function checkDept(d_id in number, d_name in varchar2) return boolean;
+    
 end functions_pck;
 /
 
@@ -128,6 +135,61 @@ as
         when no_data_found then
             raise_application_error(-20002, 'PROFESSOR_NOT_FOUND');
     end;
+    
+    function doCountStudentsInDept(d_id in number)
+    return integer
+    as 
+        nstud integer default 0;
+    begin
+        select count(stud_id)
+        into nstud
+        from students s 
+        where s.dept_id = d_id;
+            
+        return nstud;
+    end;
+    
+    function doCountProfInDept(d_id in number, sys_ref out sys_refcursor)
+    return integer
+    as 
+        nprof integer default 0;
+    begin
+        select count(prof_id)
+        into nprof
+        from professors p 
+        where p.dept_id = d_id;
+        
+        open sys_ref for
+            select * from departments
+            where dept_id = d_id;
+        
+        return nprof;
+    end;
+    
+    function checkDept(d_id in number, d_name in varchar2) return boolean
+    as
+        checked boolean;
+        
+        cursor dept is select * from departments;
+        
+        nothing_detected exception;
+    begin
+        for d in dept
+        loop
+            if d.dept_id = d_id then
+                return true;
+            elsif d.dept_name = d_name then
+                return true;
+            end if;
+        end loop;
+        
+        raise nothing_detected;
+        
+        exception 
+            when nothing_detected then
+                return false;
+    end;
+
     
 end functions_pck;
 /

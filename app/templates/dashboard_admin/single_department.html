@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <table class="table">
+        <h2>Department details</h2>
+        <tbody>
+        {% for detail in dept %}
+            <tr>
+                <th scope="row">Department ID</th>
+                <td>{{detail.0}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Department Name</th>
+                <td>{{detail.1}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Students Enroled</th>
+                <td>{{detail.2}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Professors</th>
+                <td>{{detail.3}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

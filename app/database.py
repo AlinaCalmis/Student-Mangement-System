@@ -126,6 +126,58 @@ class OracleConnection:
         cursor.close()
         return courses
 
+    def showDepartments(self):
+        cursor = self.db.cursor()
+        self.cursor.callproc("procedures_pck.showDepts", (cursor, ))
+        depts_c = cursor.fetchall()
+        depts = [list(c) for c in depts_c]
+        print(depts)
+        cursor.close()
+        return depts
+
+    def getAllInfoStudent(self, id):
+        cursor = self.db.cursor()
+        self.cursor.callproc("procedures_pck.getAllInfoStudent", (id, cursor))
+        depts_c = cursor.fetchall()
+        info = [list(c) for c in depts_c]
+        print(info)
+        cursor.close()
+        return info
+
+    def getAllInfoProf(self, id):
+        cursor = self.db.cursor()
+        self.cursor.callproc("procedures_pck.getAllInfoProf", (id, cursor))
+        depts_c = cursor.fetchall()
+        info = [list(c) for c in depts_c]
+        print(info)
+        cursor.close()
+        return info
+
+    def getAllInfoDept(self, id):
+
+        return_type = cx_Oracle.DB_TYPE_NUMBER
+        cursor = self.db.cursor()
+        nprof = self.cursor.callfunc("functions_pck.doCountProfInDept", return_type, (id, cursor))
+        nstud = self.cursor.callfunc("functions_pck.doCountStudentsInDept", return_type, (id, ))
+        dept_c = cursor.fetchall()
+        info = [list(c) for c in dept_c]
+        print(info)
+        info[0].extend([int(nstud), int(nprof)])
+        print(nstud, nprof, info)
+        return info
+
+    def removeDept(self, id):
+        self.cursor.callproc("procedures_pck.removeDepartment", (id, ))
+
+    def addDept(self, id, name):
+        self.cursor.callproc("procedures_pck.addDepartment", (id, name))
+        self.db.commit()
+
+    def checkDept(self, id, name):
+        return_type = cx_Oracle.DB_TYPE_BOOLEAN
+        return self.cursor.callfunc("functions_pck.checkDept", return_type, (id, name))
+
+
 if __name__ == "__main__":
     oc = OracleConnection('localhost', 1521, 'xe', 'system', 'Unudoitrei.123')
     oc.openConnection()

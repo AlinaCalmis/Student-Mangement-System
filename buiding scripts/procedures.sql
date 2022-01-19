@@ -52,6 +52,9 @@ as
     procedure removeStudRecord(s_id in number, c_id in number);
         
     procedure showCourses(sys_ref out sys_refcursor);
+    procedure showDepts(sys_ref out sys_refcursor);
+    procedure getAllInfoStudent(s_id in number, sys_ref out sys_refcursor);
+    procedure getAllInfoProf(p_id in number, sys_ref out sys_refcursor);
     
 end procedures_pck;
 /
@@ -172,6 +175,46 @@ as
     begin
         open sys_ref  for select * from courses;
     end;
+    
+    procedure showDepts(sys_ref out sys_refcursor)
+    is
+    begin
+        open sys_ref for 
+        select * 
+        from departments
+        order by dept_id;
+    end;
 
+    procedure getAllInfoStudent(s_id in number, sys_ref out sys_refcursor)
+    is
+    begin
+        open sys_ref for
+             select  STUD_ID ,
+                    CNP ,
+                    F_NAME ,
+                    L_NAME ,
+                    to_char(BIRTH_DATE) ,
+                    PHONE ,
+                    EMAIL ,
+                    PASS ,
+                    ADDRESS ,
+                    GENDER ,
+                    to_char(ENROLMENT),
+                    STUDY_YEAR ,
+                    DEPT_ID  
+            from students
+            where stud_id = s_id;  
+    end;
+    
+    procedure getAllInfoProf(p_id in number, sys_ref out sys_refcursor)
+    is
+    begin
+        open sys_ref for
+            select * 
+            from professors
+            where p_id = prof_id;
+    end;
+    
+    
 end procedures_pck;
 /

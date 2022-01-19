@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Department Name</th>
+                <th scope="col">Details</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dept in depts %}
+        <tr>
+            <th scope="row">{{dept.0}}</th>
+            <td>{{dept.1}}</td>
+            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('single_dept', dept_id = dept.0 ) }}">Details</a> </td>
+            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('delete_dept', dept_id = dept.0 ) }}">Delete</a> </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{url_for('add_department')}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add new department</a>
+</div>
+
+{% endblock content %}

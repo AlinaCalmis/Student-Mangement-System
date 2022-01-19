@@ -36,8 +36,10 @@
                 {% if session.active %}
                     {% if session.type == "professor" %}
                         <a class="nav-item nav-link" href="/dashboard_professor">Dashboard</a>
-                    {% else %}
+                    {% elif session.type == "student" %}
                         <a class="nav-item nav-link" href="/dashboard_student">Dashboard</a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="/dashboard_admin">Dashboard</a>
                     {% endif %}
                     <a class="nav-item nav-link" href="/personal_data">Personal data</a>
                     <a class="nav-item nav-link" href="/logout">Logout</a>
@@ -49,27 +51,10 @@
         </div>
       </nav>
     </header>
-    <div class="wrapper d-flex">
-        <div class="sidebar"> <small class="text-muted pl-3">WIDR PAY</small>
-            <ul>
-                <li><a href="#"><i class="fas fa-home"></i>Dashboard</a></li>
-                <li><a href="#"><i class="far fa-credit-card"></i>Payment Page <img src="https://img.icons8.com/material-outlined/24/000000/new.png" /></a></li>
-                <li><a href="#"><i class="fas fa-file-invoice"></i>Invoices <img src="https://img.icons8.com/material-outlined/24/000000/2.png" /></a></li>
-            </ul> <small class="text-muted px-3">PRODUCTIVITY TOOLS</small>
-            <ul>
-                <li><a href="#"><i class="far fa-calendar-alt"></i>Online Scheduler</a></li>
-                <li><a href="#"><i class="fas fa-video"></i>Video Meeting</a></li>
-                <li><a href="#"><i class="fas fa-id-badge"></i>Public Profile</a></li>
-            </ul> <small class="text-muted px-3">GROW YOUR CLIENT BASE</small>
-            <ul>
-                <li><a href="#"><i class="fas fa-external-link-alt"></i>Share</a></li>
-                <li><a href="#"><i class="fas fa-code"></i>Add to Website</a></li>
-            </ul>
-        </div>
-    </div>
-    <main role="main" class="container">
+
+    <main role="main" class="container-fluid  justify-content-evenly">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
@@ -83,7 +68,7 @@
         </div>
       </div>
     </main>
-    
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
