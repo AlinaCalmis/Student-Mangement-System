@@ -1,10 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<!--<div class="container">-->
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="content-section">
+                         <table class="table">
+                            <h2>Student details</h2>
+                            <tbody>
+                            {% for detail in student %}
+                                <tr>
+                                    <th scope="row">Student ID</th>
+                                    <td>{{detail.0}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Student Name</th>
+                                    <td>{{detail.2}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">CNP</th>
+                                    <td>{{detail.1}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Birth Date</th>
+                                    <td>{{detail.3}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Phone</th>
+                                    <td>{{detail.4}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Address</th>
+                                    <td>{{detail.7}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Email</th>
+                                    <td>{{detail.5}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Password</th>
+                                    <td>{{detail.6}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Gender</th>
+                                    <td>{{detail.8}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Enrolment Date</th>
+                                    <td>{{detail.9}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Study Year</th>
+                                    <td>{{detail.10}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Department</th>
+                                    <td>{{detail.11}}</td>
+                                </tr>
+                    <!--        {% endfor %}-->
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td>
+                    <div class="content-section">
+
+                         <table class="table">
+                             <div class="row">
+                                 <div class="col text-center">
+                                     <h6>Student courses </h6>
+                                 </div>
+                             </div>
+                             <div class="row text-center">
+                                 <div class="col">
+                                     <div class = "btn-group">
+                                        <button class="btn btn-secondary dropdown-toggle block" type="button" id="btnDropdownDemo"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                           Add course
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="btnDropdownDemo">
+                                            {% for c in courses %}
+                                            <a class = "dropdown-item"
+                                               href = "{{url_for('add_student_course', stud_id=student.0.0 , course_id=c.0)}}">{{c.1}}</a>
+                                            {% endfor %}
+                                        </div>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <thead>
+                                <th scope="col">Course name</th>
+                                <th scope="col">Final grade</th>
+                                <th scope="col">Exam</th>
+                                <th scope="col">Update</th>
+                                <th scope="col">Delete</th>
+                             </thead>
+                            <tbody>
+                            {% if s_courses %}
+                                {% for detail in s_courses %}
+                                    <tr>
+                                        <td>{{detail.1}}</td>
+                                        <td>{{detail.2}}</td>
+                                        <td>{{detail.3}}</td>
+                                        <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke"
+                                               href="{{url_for('update_student_course', stud_id=student.0.0,
+                                                       course_id=detail.0)}}">Update</a></td>
+                                        <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke"
+                                               href="{{url_for('delete_student_course', stud_id=student.0.0,
+                                                       course_id=detail.0)}}">Delete</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<!--</div>-->
+{% endblock content %}

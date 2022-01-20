@@ -27,7 +27,7 @@
                 <div class="card" style="width: 300px;">
                     <img src="..\static\images\courses.png" alt="Professors" class="card-img-top">
                     <div class="card-body">
-                        <a class="classWithPad clickable" href="https://www.geeksforgeeks.org/">
+                        <a class="classWithPad clickable" href="{{ url_for('manage_courses') }}">
                             <h4>Manage Courses</h4>
                         </a>
                     </div>
@@ -37,7 +37,7 @@
                 <div class="card" style="width: 300px;">
                     <img src="..\static\images\stud.png" alt="Professors" class="card-img-top">
                     <div class="card-body">
-                        <a class="classWithPad clickable" href="https://www.geeksforgeeks.org/">
+                        <a class="classWithPad clickable" href="{{ url_for('manage_students') }}">
                             <h4>Manage Students</h4>
                         </a>
                     </div>

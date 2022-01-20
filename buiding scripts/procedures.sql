@@ -4,13 +4,13 @@ as
                                        cnp in varchar2,
                                        f_name in varchar2,
                                        l_name in varchar2,
-                                       bd in DATE,
+                                       bd in varchar2,
                                        phone in varchar2,
                                        email in varchar2,
                                        pass in varchar2,
                                        addr in varchar2,
                                        gender in varchar2,
-                                       enrolment in date,
+                                       enrolment in varchar2,
                                        study_y in number,
                                        dept_id in number
                                        );
@@ -19,7 +19,7 @@ as
                                          CNP in varchar2,
                                          f_name in varchar2,
                                          l_name in varchar2,
-                                         birth_date in DATE,
+                                         birth_date in varchar2,
                                          phone in char,
                                          email in char,
                                          pass in char,
@@ -61,6 +61,10 @@ as
     procedure showProfessors(sys_ref out sys_refcursor);
     procedure showProfCourses(sys_ref out sys_refcursor);
     procedure getCourseData(c_id in number, sys_out out sys_refcursor);
+    procedure showStudents(modet in varchar2, sys_ref out sys_refcursor);
+    procedure studyYears(sys_ref out sys_refcursor);
+    procedure showStudCourses(stud_id in number, sys_ref out sys_refcursor);
+    procedure updateCourseStud(studid in number, courseid in number, grade in number);
     
 end procedures_pck;
 /
@@ -72,26 +76,26 @@ as
                                        cnp in varchar2,
                                        f_name in varchar2,
                                        l_name in varchar2,
-                                       bd in DATE,
+                                       bd in varchar2,
                                        phone in varchar2,
                                        email in varchar2,
                                        pass in varchar2,
                                        addr in varchar2,
                                        gender in varchar2,
-                                       enrolment in date,
+                                       enrolment in varchar2,
                                        study_y in number,
                                        dept_id in number
                                        )
     is
     begin
-        insert into students values(stud_id, cnp, f_name, l_name, bd, phone, email, pass, addr, gender, enrolment, study_y, dept_id);
+        insert into students values(stud_id, cnp, f_name, l_name, to_date(bd,'dd-mm-yyyy'), phone, email, pass, addr, gender, to_date(enrolment,'dd-mm-yyyy'), study_y, dept_id);
     end;
 
     procedure addProfessor(prof_id in number,
                                          CNP in varchar2,
                                          f_name in varchar2,
                                          l_name in varchar2,
-                                         birth_date in DATE,
+                                         birth_date in varchar2,
                                          phone in char,
                                          email in char,
                                          pass in char,
@@ -100,7 +104,7 @@ as
                                          )
     is
     begin
-        insert into professors values(prof_id,CNP,f_name,l_name,birth_date,phone,email,pass,gender,dept_id);
+        insert into professors values(prof_id,CNP,f_name,l_name,to_date(birth_date, 'dd-MM-yyyy'),phone,email,pass,gender,dept_id);
     end;
 
     procedure addDepartment(dept_id in number, dept_name in varchar2)
@@ -209,20 +213,20 @@ as
     is
     begin
         open sys_ref for
-             select  STUD_ID ,
-                    CNP ,
-                    F_NAME ,
-                    L_NAME ,
-                    to_char(BIRTH_DATE) ,
-                    PHONE ,
-                    EMAIL ,
-                    PASS ,
-                    ADDRESS ,
-                    GENDER ,
-                    to_char(ENROLMENT),
-                    STUDY_YEAR ,
-                    DEPT_ID  
-            from students
+             select S.STUD_ID ,
+                    S.CNP ,
+                    S.F_NAME ||' ' ||
+                    S.L_NAME ,
+                    to_char(S.BIRTH_DATE) ,
+                    S.PHONE ,
+                    S.EMAIL ,
+                    S.PASS ,
+                    S.ADDRESS ,
+                    S.GENDER ,
+                    to_char(S.ENROLMENT),
+                    S.STUDY_YEAR ,
+                    D.DEPT_NAME  
+            from students s join departments d on s.dept_id = d.dept_id
             where stud_id = s_id;  
     end;
     
@@ -276,6 +280,70 @@ as
             full join (select a.prof_id, a.f_name ||' '|| a.l_name as full_name, b.course_id
                 from professors a inner join given_courses b on b.prof_id = a.prof_id) p on c.course_id = p.course_id
             where c.course_id = c_id;
+    end;
+    
+    procedure showStudents(modet in varchar2, sys_ref out sys_refcursor)
+    as
+        orderby integer := 1;
+    begin
+    
+        if modet='dept' then orderby:= 11;
+            elsif modet='year' then orderby:= 10;
+            elsif modet='gender' then orderby:= 8;
+        end if;
+    
+        open sys_ref for
+                select  S.STUD_ID ,
+                        S.CNP ,
+                        S.F_NAME ||' ' ||S.L_NAME ,
+                        to_char(S.BIRTH_DATE) ,
+                        S.PHONE ,
+                        S.EMAIL ,
+                        S.PASS ,
+                        S.ADDRESS ,
+                        S.GENDER ,
+                        to_char(S.ENROLMENT) ,
+                        S.STUDY_YEAR ,
+                        S.DEPT_ID ,
+                        D.DEPT_NAME
+                from students s join departments d on d.dept_id = s.dept_id
+                order by orderby;
+
+    end;
+    
+    procedure studyYears(sys_ref out sys_refcursor)
+    as
+    begin
+        open sys_ref for
+            select distinct(study_year) from students
+            order by 1;
+    end;
+    
+    procedure showStudCourses(stud_id in number, sys_ref out sys_refcursor)
+    as
+    begin
+        open sys_ref for
+            select c.course_id, c.course_name, r.f_grade, r.passed
+            from courses c inner join student_records r on c.course_id = r.course_id
+            where r.stud_id = stud_id;
+       
+
+    end;
+    
+     
+     
+    procedure updateCourseStud(studid in number, courseid in number, grade in number)
+    as
+        do_pass varchar2(5);
+    begin
+        if grade >= 5 then do_pass := 'yes';
+        else do_pass := 'no';
+        end if;
+        
+        update student_records 
+        set f_grade = grade,
+            passed = do_pass
+        where stud_id = studid and course_id = courseid;
     end;
     
 end procedures_pck;

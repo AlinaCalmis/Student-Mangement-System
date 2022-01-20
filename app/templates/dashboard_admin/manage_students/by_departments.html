@@ -5,15 +5,14 @@
         <tbody>
             <tr>
                 <td>
-                    <h3>Students by gender &nbsp;&nbsp;&nbsp;&nbsp;
+                    <h3>All students &nbsp;&nbsp;&nbsp;&nbsp;
                         <div class = "btn-group">
-                            <button class="btn btn-secondary  dropdown-toggle block" type="button" id="btnDropdownDemo"
+                            <button class="btn btn-secondary dropdown-toggle block" type="button" id="btnDropdownDemo"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                Select view
                             </button>
 
                             <div class="dropdown-menu" aria-labelledby="btnDropdownDemo">
-
                                 <a class = "dropdown-item" href = "{{url_for('manage_students')}}">All</a>
                                 <a class = "dropdown-item" href = "{{url_for('by_departments')}}">By departments</a>
                                 <a class = "dropdown-item" href = "{{url_for('by_study_year')}}">By year</a>
@@ -30,13 +29,10 @@
         </tbody>
     </table>
     <div class="row"></div>
-        {% if genders %}
-            {% for gen in genders %}
+        {% if depts %}
+            {% for dept in depts %}
                  <div class="content-section">
-                     <table class="table"> <tbody><tr>
-                         <td><h2>Students {{gen.0}} &nbsp;&nbsp;&nbsp;&nbsp;</h2></td></tr><tr>
-                         <td><h6>Total number of students: {{gen.1}}</h6></td>
-                     </tr></tbody></table>
+                    <h2>Department {{dept.1}}</h2>
                     <table class="table">
                         <thead>
                             <tr>
@@ -53,7 +49,7 @@
 
                         <tbody>
                             {% for p in students %}
-                                {% if p.8 == gen.0 %}
+                                {% if p.11 == dept.0 %}
                                     <tr>
                                         <th scope="row">{{p.0}}</th>
                                         <td>{{p.1}}</td>

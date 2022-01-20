@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
+<style>
+  tr:hover {
+     background: #E1E1E1;
+	}
+	td a {
+	  display: block;
+	  }
+</style>
+<div class="container">
+    <table class="table">
+        <h2>Professor details</h2>
+        <tbody>
+            <tr>
+                <th scope="row">Course ID</th>
+                <td>{{courses.0.0}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Course Name</th>
+                <td>{{courses.0.1}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Credit Points</th>
+                <td>{{courses.0.2}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Units</th>
+                <td>{{courses.0.3}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Professors:</h2>
+     <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"> Professor ID</th>
+                <th scope="col"> Professor Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if courses.5 %}
+            {% for detail in courses %}
+                <tr>
+                    <td><a href="{{ url_for('single_professor', prof_id = detail.5, course_id = courses.0.0 )}}"> {{detail.5}} </a></td>
+                    <td><a href="{{ url_for('single_professor', prof_id = detail.5, course_id = courses.0.0 )}}"> {{detail.4}} </a></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+</div>
 
-</body>
-</html>
+{% endblock content %}

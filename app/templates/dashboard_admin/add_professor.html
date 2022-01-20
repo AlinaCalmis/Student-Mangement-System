@@ -1,10 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <form action="" method = "post">
+        <fieldset>
+            <legend>Add new professor</legend>
+            {{ form.hidden_tag() }}
+            <div class="content-section ">
+                <br>
+                <p align="center">CNP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {{form.cnp(size=104)}}</p>
+                <br>
+                <br>
+                <p align="center">First name &nbsp;
+                {{ form.f_name(size=104) }}</p>
+                <br>
+                <br>
+                <p align="center">Last name &nbsp;
+
+                {{form.l_name(size=104)}}</p>
+                <br>
+                <br>
+                <p align="center">Birthdate &nbsp;&nbsp;&nbsp;
+                {{ form.bdate(size=104) }}</p>
+                <br>
+                <br>
+                <p align="center">Phone &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ form.phone(size=104) }}</p>
+                <br>
+                <br>
+                <p align="center">Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ form.email(size=104) }}</p>
+                <br>
+                <br>
+                 <p align="center">Password &nbsp;
+                {{ form.passwd(size=104) }}</p>
+                <br>
+                <br>
+                 <p align="center"> Gender </p>
+                     <div class="container text-center">
+                   {{ form.gender(size=32) }}</div>
+                 <p align="center">Department
+                {{ form.dept(size=104) }} </p>
+                <br>
+                <div class="container text-center"><p>{{ form.submit() }}</p></div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+{% endblock content %}

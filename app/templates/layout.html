@@ -28,7 +28,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="/">Home</a>
+              <a class="nav-item nav-link" href="/"></a>
 
             </div>
             <!-- Navbar Right Side -->
@@ -36,12 +36,13 @@
                 {% if session.active %}
                     {% if session.type == "professor" %}
                         <a class="nav-item nav-link" href="/dashboard_professor">Dashboard</a>
+                        <a class="nav-item nav-link" href="/personal_data">Personal data</a>
                     {% elif session.type == "student" %}
                         <a class="nav-item nav-link" href="/dashboard_student">Dashboard</a>
+                        <a class="nav-item nav-link" href="/personal_data">Personal data</a>
                     {% else %}
                         <a class="nav-item nav-link" href="/dashboard_admin">Dashboard</a>
                     {% endif %}
-                    <a class="nav-item nav-link" href="/personal_data">Personal data</a>
                     <a class="nav-item nav-link" href="/logout">Logout</a>
                 {% else %}
                     <a class="nav-item nav-link" href="/login">Login</a>

@@ -46,16 +46,11 @@
     </table>
     <h2>Courses:
         <div class = "btn-group">
-            <button class = "btn btn-secondary btn-lg btn-block" type = "button">
+            <button class="btn btn-secondary dropdown-toggle block" type="button" id="btnDropdownDemo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                Add new course to {{prof.0.2}}
             </button>
 
-            <button type = "button" class = "btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
-               data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "true">
-               <span class = "sr-only">Toggle Dropdown</span>
-            </button>
-
-            <div class = "dropdown-menu">
+            <div class="dropdown-menu" aria-labelledby="btnDropdownDemo">
                 {% for course in courses %}
                <a class = "dropdown-item"
                   href = "{{url_for('add_course_prof', prof_id = prof.0.0, course_id = course.0)}}">{{course.1}}

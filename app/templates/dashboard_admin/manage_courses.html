@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-lg-2">
+    <div class="text-center">
+    <a href="{{url_for('add_course')}}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Add new course</a>
+    </div>
+    <div class="row"></div>
+        <h3>Courses: </h3>
+        <br>
+        <div class="content-section">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Credit Points</th>
+                    <th scope="col">Units</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% if courses %}
+                {% for p in courses %}
+                        <tr>
+                            <th scope="row">{{p.0}}</th>
+                            <td>{{p.1}}</td>
+                            <td><a class="row clickable" href="#"> {{p.2}}</a></td>
+                            <td>{{p.3}}</td>
+                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('course_details', course_id = p.0 ) }}">Details</a> </td>
+                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('delete_course', course_id = p.0 ) }}">Delete</a> </td>
+                        </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+        </div>
+</div>
+{% endblock content %}

@@ -22,8 +22,13 @@ as
     
     function checkDept(d_id in number, d_name in varchar2) return boolean;
     
+    function studGender(sys_ref out sys_refcursor) return integer;
 
+    function countMen(modet in varchar2) return integer;
     
+    function addCourseStud(stud_id in number, course_id in number) return boolean;
+    
+
 end functions_pck;
 /
 
@@ -195,8 +200,62 @@ as
                 return false;
     end;
 
-
+    function studGender(sys_ref out sys_refcursor) return integer
+    as 
+        female integer;
+    begin
+        
+        select count(stud_id)
+        into female
+        from students
+        where gender = 'female';
     
+        open sys_ref for 
+            select distinct(gender)
+            from students;
+            
+        return female;
+    end;
+    
+    function countMen(modet in varchar2) return integer
+    as
+    men integer:=0;
+    begin
+        if modet = 'stud' then
+            select count(stud_id)
+            into men
+            from students
+            where gender='male';
+        elsif modet = 'prof' then
+            select count(prof_id)
+            into men
+            from professors
+            where gender='male';
+        end if;
+        return men;
+    end;
+    
+    function addCourseStud(stud_id in number, course_id in number)
+    return boolean
+     as
+        cursor courses_c is
+            select r.stud_id, r.course_id
+            from student_records r;
+        exist boolean := false;
+     begin
+        for c in courses_c
+        loop
+            if c.stud_id = stud_id and c.course_id = course_id then
+                exist := true;
+                return false;
+            end if;
+        end loop;
+        
+        insert into student_records values(stud_id, course_id, 0, null);
+        return true;
+        
+     end;
+ 
     
 end functions_pck;
 /

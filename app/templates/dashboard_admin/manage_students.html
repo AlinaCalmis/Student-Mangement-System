@@ -1,10 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-lg-2">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <h3>All students &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class = "btn-group">
+                            <button class="btn btn-secondary dropdown-toggle block" type="button" id="btnDropdownDemo"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               Select view
+                            </button>
+
+                            <div class="dropdown-menu" aria-labelledby="btnDropdownDemo">
+                                <a class = "dropdown-item" href = "{{url_for('manage_students')}}">All</a>
+                                <a class = "dropdown-item" href = "{{url_for('by_departments')}}">By departments</a>
+                                <a class = "dropdown-item" href = "{{url_for('by_study_year')}}">By year</a>
+                                <a class = "dropdown-item" href = "{{url_for('by_gender')}}">By gender</a>
+                            </div>
+                        </div>
+                    </h3>
+                </td>
+                <td><div class="text-center">
+                <a href="{{url_for('add_student')}}" class="btn btn-secondary active" role="button"
+                   aria-pressed="true">Add new student</a>
+                </div></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row"></div>
+        <div class="content-section">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">CNP</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Study Year</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for p in students %}
+                        <tr>
+                            <th scope="row">{{p.0}}</th>
+                            <td>{{p.1}}</td>
+                            <td><a class="row clickable" href="#"> {{p.2}}</a></td>
+                            <td>{{p.4}}</td>
+                            <td>{{p.5}}</td>
+                            <td>{{p.10}}</td>
+                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{url_for('single_student', stud_id=p.0)}}">Details</a> </td>
+                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="#">Delete</a> </td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+</div>
+{% endblock content %}
