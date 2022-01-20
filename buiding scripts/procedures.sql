@@ -37,9 +37,12 @@ as
                                       credit_pts in number,
                                       units in number
                                       );
+    procedure addGivenCourse(course_id in number, professor_id in number);
     procedure loginUser(user_id in number);
     
     procedure logoutUser(user_id in number);
+    
+    procedure removeGivenCourse(course_id in number, professor_id in number);
     
     procedure removeCourse(c_id in number);
     
@@ -55,6 +58,9 @@ as
     procedure showDepts(sys_ref out sys_refcursor);
     procedure getAllInfoStudent(s_id in number, sys_ref out sys_refcursor);
     procedure getAllInfoProf(p_id in number, sys_ref out sys_refcursor);
+    procedure showProfessors(sys_ref out sys_refcursor);
+    procedure showProfCourses(sys_ref out sys_refcursor);
+    procedure getCourseData(c_id in number, sys_out out sys_refcursor);
     
 end procedures_pck;
 /
@@ -120,6 +126,12 @@ as
         insert into courses values(course_id, course_name, credit_pts, units);
     end;
     
+    procedure addGivenCourse(course_id in number, professor_id in number)
+    is
+    begin
+        insert into given_courses values(course_id, professor_id);
+    end;
+    
     procedure loginUser(user_id in number)
     is
     begin
@@ -134,6 +146,14 @@ as
     
     
     ------ remove -----
+    
+    procedure removeGivenCourse(course_id in number, professor_id in number)
+    is 
+    begin
+        delete from given_courses g
+        where g.course_id = course_id and g.prof_id = professor_id;
+    end;
+    
     procedure removeCourse(c_id in number)
     is
     begin
@@ -210,11 +230,53 @@ as
     is
     begin
         open sys_ref for
-            select * 
+            select  PROF_ID ,
+                    CNP ,
+                    F_NAME || ' ' ||
+                    L_NAME ,
+                    to_char(BIRTH_DATE) ,
+                    PHONE ,
+                    EMAIL ,
+                    PASS ,
+                    GENDER ,
+                    DEPT_ID  
             from professors
             where p_id = prof_id;
     end;
     
+    procedure showProfessors(sys_ref out sys_refcursor)
+    is
+    begin
+        open sys_ref for
+            select  PROF_ID ,
+                    CNP ,
+                    F_NAME || ' ' ||
+                    L_NAME ,
+                    EMAIL ,
+                    DEPT_ID  
+            from professors 
+            order by dept_id,prof_id;
+    end;
+    
+    procedure showProfCourses(sys_ref out sys_refcursor)
+    is
+    begin
+        open sys_ref for
+            select *
+            from  given_courses;
+    end;
+    
+    
+    procedure getCourseData(c_id in number, sys_out out sys_refcursor)
+    as
+    begin
+        open sys_out for
+            select c.course_id, c.course_name, c.credit_pts, c.units, p.full_name, p.prof_id
+            from courses c
+            full join (select a.prof_id, a.f_name ||' '|| a.l_name as full_name, b.course_id
+                from professors a inner join given_courses b on b.prof_id = a.prof_id) p on c.course_id = p.course_id
+            where c.course_id = c_id;
+    end;
     
 end procedures_pck;
 /

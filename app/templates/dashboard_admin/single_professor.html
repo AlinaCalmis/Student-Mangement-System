@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <table class="table">
+        <h2>Professor details</h2>
+        <tbody>
+        {% for detail in prof %}
+            <tr>
+                <th scope="row">Professor ID</th>
+                <td>{{detail.0}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Professor Name</th>
+                <td>{{detail.2}}</td>
+            </tr>
+            <tr>
+                <th scope="row">CNP</th>
+                <td>{{detail.1}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Birth date</th>
+                <td>{{detail.3}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Phone</th>
+                <td>{{detail.4}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Email</th>
+                <td>{{detail.5}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Password</th>
+                <td>{{detail.6}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Gender</th>
+                <td>{{detail.7}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Department</th>
+                <td>{{detail.8}}</td>
+            </tr>
+<!--        {% endfor %}-->
+        </tbody>
+    </table>
+    <h2>Courses:
+        <div class = "btn-group">
+            <button class = "btn btn-secondary btn-lg btn-block" type = "button">
+               Add new course to {{prof.0.2}}
+            </button>
+
+            <button type = "button" class = "btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
+               data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "true">
+               <span class = "sr-only">Toggle Dropdown</span>
+            </button>
+
+            <div class = "dropdown-menu">
+                {% for course in courses %}
+               <a class = "dropdown-item"
+                  href = "{{url_for('add_course_prof', prof_id = prof.0.0, course_id = course.0)}}">{{course.1}}
+               </a>
+                {% endfor %}
+            </div>
+        </div>
+    </h2>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"> Course</th>
+                <th scope="col"> Details</th>
+                <th scope="col"> Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for c in my_courses %}
+            <tr>
+                <td> {{c.1}} </td>
+                <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('course_details', course_id = c.0 ) }}">Details</a> </td>
+                <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('delete_course_prof', prof_id = prof.0.0, course_id = c.0 ) }}">Delete</a> </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock content %}

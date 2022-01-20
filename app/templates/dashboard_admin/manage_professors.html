@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-lg-2">
+    <div class="dropdown">
+        <button class="btn btn-warning dropdown-toggle block" type="button" id="btnDropdownDemo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+            Show Professors
+
+         </button>
+
+        <div class="dropdown-menu" aria-labelledby="btnDropdownDemo">
+
+            <a class="dropdown-item" href="https://www.jquery-az.com/bootstrap-4/">Bootstrap 4</a>
+
+            <a class="dropdown-item" href="https://www.jquery-az.com/jquery-tips/">jQuery</a>
+
+            <a class="dropdown-item" href="https://www.jquery-az.com/html-tutorials/">HTML</a>
+
+            <a class="dropdown-item" href="https://www.jquery-az.com/css-tutorials/">CSS</a>
+
+        </div>
+    </div>
+    {% for i in depts %}
+        <h3>Department: {{i.1}}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">CNP</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for p in profs %}
+                    {% if p.4 == i.0%}
+                        <tr>
+                            <th scope="row">{{p.0}}</th>
+                            <td>{{p.1}}</td>
+                            <td><a class="row clickable" href="#"> {{p.2}}</a></td>
+                            <td>{{p.3}}</td>
+                            <td>{{i.1}}</td>
+                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('single_professor', prof_id = p.0, course_id = 1 ) }}">Details</a> </td>
+                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('delete_professor', prof_id = p.0 ) }}">Delete</a> </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+</div>
+{% endblock content %}

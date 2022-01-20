@@ -168,6 +168,7 @@ class OracleConnection:
 
     def removeDept(self, id):
         self.cursor.callproc("procedures_pck.removeDepartment", (id, ))
+        self.db.commit()
 
     def addDept(self, id, name):
         self.cursor.callproc("procedures_pck.addDepartment", (id, name))
@@ -176,6 +177,50 @@ class OracleConnection:
     def checkDept(self, id, name):
         return_type = cx_Oracle.DB_TYPE_BOOLEAN
         return self.cursor.callfunc("functions_pck.checkDept", return_type, (id, name))
+
+    def showProfessors(self):
+        cursor = self.db.cursor()
+        self.cursor.callproc("procedures_pck.showProfessors", (cursor, ))
+        profs_c = cursor.fetchall()
+        # cursor.close()
+        profs = [list(p) for p in profs_c]
+        return profs
+
+    def removeProf(self, id):
+        self.cursor.callproc("procedures_pck.removeProfessor",(id, ))
+        self.db.commit()
+
+    def removeCourseProf(self, prof_id, course_id):
+        self.cursor.callproc("procedures_pck.removeGivenCourse", (course_id, prof_id))
+        self.db.commit()
+
+    def addCourseProf(self, prof_id, course_id):
+        self.cursor.callproc("procedures_pck.addGivenCourse", (course_id, prof_id))
+        self.db.commit()
+
+    def showProfCourses(self, prof_id):
+        cursor = self.db.cursor()
+        self.cursor.callproc("procedures_pck.showProfCourses", (cursor,))
+        course_c = cursor.fetchall()
+        cursor.close()
+        courses_ids = [list(p) for p in course_c]
+        courses_names = self.showCourses()
+
+        final = []
+        for c in courses_names:
+            for cid in courses_ids:
+                if c[0] == cid[0] and cid[1] == prof_id:
+                    final.append([c[0],c[1]])
+
+        return final
+
+    def showOneCourse(self,course_id):
+        cursor = self.db.cursor()
+        self.cursor.callproc("procedures_pck.getCourseData", (course_id, cursor))
+        course_c = cursor.fetchall()
+        cursor.close()
+        courses = [list(p) for p in course_c]
+        print(courses)
 
 
 if __name__ == "__main__":

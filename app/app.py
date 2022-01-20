@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, session, flash,request
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, widgets
 from wtforms.validators import InputRequired, Length
 from database import *
 
@@ -27,6 +27,16 @@ class DepartmentForm(FlaskForm):
     dept_id = StringField(validators=[InputRequired(),Length(min=4, max=10)], render_kw={"placeholder": "Department ID"})
     dept_name = StringField(validators=[InputRequired(),Length(min=4, max=100)], render_kw={"placeholder": "Department Name"})
     submit = SubmitField("Add")
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+class AddExistingCourse(FlaskForm):
+    course = MultiCheckboxField('Select Cards for Deck', coerce=str)
+    submit = SubmitField("Add")
+
 
 def load_user(uid):
     # db.openConnection()
@@ -136,17 +146,10 @@ def single_student(stud_id):
     return render_template('dashboard_admin/single_student.html', student=student)
 
 
-@app.route('/dashboard_admin/single_prof/<int:prof_id>')
-def single_prof(prof_id):
-    prof = db.getAllInfoProf(prof_id)
-    return render_template('dashboard_admin/single_prof.html', prof=prof)
-
-
 @app.route('/dashboard_admin/delete_department/<int:dept_id>', methods=["GET", "POST"])
 def delete_dept(dept_id):
     db.removeDept(dept_id)
     return redirect(url_for('manage_departments'))
-
 
 @app.route('/dashboard_admin/add_department', methods=["GET", "POST"])
 def add_department():
@@ -164,7 +167,60 @@ def add_department():
     return render_template('/dashboard_admin/add_department.html', form=form)
 
 
-# db.closeConnection()
+# ---------- Manage professors ---------------
+
+@app.route('/dashboard_admin/manage_professors', methods=["GET", "POST"])
+def manage_professors():
+    profs = db.showProfessors()
+    depts = db.showDepartments()
+    print(profs)
+    return render_template('dashboard_admin/manage_professors.html', depts=depts, profs=profs)
+
+
+@app.route('/dashboard_admin/delete_professor/<int:prof_id>', methods=['GET','POST'])
+def delete_professor(prof_id):
+    print("DELETING PROFESSOR")
+    db.removeProf(prof_id)
+    return redirect(url_for('manage_professors'))
+
+
+@app.route('/dashboard_admin/single_professor/<int:prof_id>')
+def single_professor(prof_id):
+    print("Single prof id ", prof_id)
+    courses = db.showCourses()
+    my_courses = db.showProfCourses(prof_id)
+    print("Single prof_id courses ",my_courses)
+    prof = db.getAllInfoProf(prof_id)
+    return render_template('dashboard_admin/single_professor.html', prof=prof, courses=courses, my_courses=my_courses)
+
+
+@app.route('/dashboard_admin/delete_course_prof/<int:prof_id>/<int:course_id>', methods=['GET','POST'])
+def delete_course_prof(prof_id, course_id):
+    print("DELETING COURSE from prof id", prof_id, " this course ",course_id)
+    db.removeCourseProf(prof_id, course_id)
+    return redirect(url_for('single_professor', prof_id=prof_id))
+
+
+@app.route('/dashboard_admin/add_course_prof/<int:prof_id>/<int:course_id>', methods=['GET','POST'])
+def add_course_prof(prof_id, course_id):
+    print("ADDING COURSE to prof_id", prof_id, course_id)
+    db.addCourseProf(prof_id, course_id)
+    return redirect(url_for('single_professor', prof_id=prof_id))
+
+@app.route('/dashboard_admin/course_details/<int:course_id>', methods=['GET','POST'])
+def course_details(course_id):
+    # print("ADDING COURSE to prof_id", prof_id, course_id)
+    db.showOneCourse(course_id)
+    return render_template('dashboard_admin/course_details.html')
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# db.closeConnection()
+
+

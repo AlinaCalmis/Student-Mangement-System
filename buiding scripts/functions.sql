@@ -1,5 +1,8 @@
+
+
 create or replace package functions_pck
 as
+
     ----------- Checks whether a student exists or not---------
     function isUserRegistered(userId in number) return boolean;
     ----------- Check credentials -----------------------------
@@ -18,6 +21,8 @@ as
     function doCountStudentsInDept(d_id in number)return integer;
     
     function checkDept(d_id in number, d_name in varchar2) return boolean;
+    
+
     
 end functions_pck;
 /
@@ -190,26 +195,9 @@ as
                 return false;
     end;
 
+
+    
     
 end functions_pck;
 /
 
-
---SET SERVEROUTPUT ON;
---declare
---    S pers_stud_data:= functions_pck.pers_stud_data();
-----    P prof_data:= prof_data();
---begin
---    
---    S.extend;
---    S(1) :=  functions_pck.pers_stud_data_rec(null,null,null,null,null,null,null);
---    dbms_output.put_line(S.count);
---    S:= functions_pck.getStudentPersonalData(1001);
-----    
-----    p.extend;
-----    p(1) :=  prof_data_rec(null,null,null,null,null,null);
-----    dbms_output.put_line(p.count);
-----    p:= getProfessorData(1);
-----    DBMS_OUTPUT.PUT_LINE(x(1));
---end;
---/
