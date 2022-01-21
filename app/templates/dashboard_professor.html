@@ -1,24 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Welcome professor!</h1>
-    <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Course Name</th>
-      <th scope="col">Cred Points</th>
-      <th scope="col">Units</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for course in courses %}
-    <tr>
-      <th scope="row">{{course.0}}</th>
-      <td>{{course.1}}</td>
-      <td>{{course.2}}</td>
-      <td>{{course.3}}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="content-section">
+      <h1>Welcome professor!</h1>
+      <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Course Name</th>
+        <th scope="col">Cred Points</th>
+        <th scope="col">Units</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+      <tr>
+        <th scope="row">{{course.0}}</th>
+        <td>{{course.1}}</td>
+        <td>{{course.2}}</td>
+        <td>{{course.3}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock content %}

@@ -10,7 +10,7 @@
 </style>
 <div class="container">
     <table class="table">
-        <h2>Professor details</h2>
+        <h2>Course details</h2>
         <tbody>
             <tr>
                 <th scope="row">Course ID</th>
@@ -39,7 +39,7 @@
             </tr>
         </thead>
         <tbody>
-        {% if courses.5 %}
+        {% if courses.0.5 %}
             {% for detail in courses %}
                 <tr>
                     <td><a href="{{ url_for('single_professor', prof_id = detail.5, course_id = courses.0.0 )}}"> {{detail.5}} </a></td>

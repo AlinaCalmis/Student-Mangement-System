@@ -4,30 +4,37 @@ create or replace package functions_pck
 as
 
     ----------- Checks whether a student exists or not---------
-    function isUserRegistered(userId in number) return boolean;
+    function isUserRegistered(p_user_id in number) return boolean;
     ----------- Check credentials -----------------------------
-    function checkPasswd(userId in number, passwd in varchar2) return boolean;
+    function checkPasswd(p_user_id in number, p_pass in varchar2) 
+                         return boolean;
     ----------- Check user type(user is logged in)-------------
-    function userType(uid in number) return varchar2;
+    function userType(p_user_id in number) return varchar2;
     ----------- Get Student Personal DATA------------
-    function getStudentData(studId in number, fullN out varchar2, phone out varchar2, 
-                         email out varchar2, addr out varchar2, sex out varchar2, y out number) return varchar2;
+    function getStudentData(p_stud_id in number, p_full out varchar2, 
+                            p_phone out varchar2, p_email out varchar2, 
+                            p_addr out varchar2, p_sex out varchar2, 
+                            y out number) return varchar2;
     ----------- Get Proessors Data ------------------
-    function getProfData(profid in number, fullN out varchar2, phone out varchar2, 
-                         email out varchar2) return varchar2;
+    function getProfData(p_prof_id in number, p_full out varchar2, 
+                         p_phone out varchar2, p_email out varchar2) 
+                         return varchar2;
                          
-    function doCountProfInDept(d_id in number, sys_ref out sys_refcursor)
+    function doCountProfInDept(p_dept_id in number, sys_ref out sys_refcursor)
                                 return integer;
-    function doCountStudentsInDept(d_id in number)return integer;
+    function doCountStudentsInDept(p_dept_id in number)return integer;
     
-    function checkDept(d_id in number, d_name in varchar2) return boolean;
+    function checkDept(p_dept_id in number, p_dept_name in varchar2) return boolean;
     
     function studGender(sys_ref out sys_refcursor) return integer;
 
     function countMen(modet in varchar2) return integer;
     
-    function addCourseStud(stud_id in number, course_id in number) return boolean;
+    function addCourseStud(p_stud_id in number, p_course_id in number) 
+                           return boolean;
     
+    function addGivenCourse(p_course_id in number, p_prof_id in number)
+    return boolean;
 
 end functions_pck;
 /
@@ -35,26 +42,27 @@ end functions_pck;
 create or replace package body functions_pck
 as
     
-    function isUserRegistered(userId in number) return boolean
+    function isUserRegistered(p_user_id in number) return boolean
     as 
         cursor usersC is
             select stud_id from students
             union
             select prof_id from professors;
+            
         cursor adminC is
-        select user_id from admins;
+            select user_id from admins;
     begin
     
         for ad in adminC
         loop
-            if ad.user_id = userId then
+            if ad.user_id = p_user_id then
                 return true;
             end if;
         end loop;
         
         for us in usersC
         loop
-            if us.stud_id = userId then
+            if us.stud_id = p_user_id then
                 return true;
             end if;
         end loop;
@@ -65,28 +73,28 @@ as
                 return false;
     end;
     
-    function checkPasswd(userId in number, passwd in varchar2) return boolean
+    function checkPasswd(p_user_id in number, p_pass in varchar2) return boolean
     as
         cursor passwords is
-        select stud_id, pass from students
-        union
-        select prof_id, pass from professors;
+            select stud_id, pass from students
+            union
+            select prof_id, pass from professors;
         
         cursor adminsC is
-        select * from admins;
+            select * from admins;
         
         nothing_detected exception;
     begin
         for us in passwords
         loop
-            if us.stud_id = userID and us.pass = passwd then
+            if us.stud_id = p_user_id and us.pass = p_pass then
                 return true;
             end if;
         end loop;
         
         for ad in adminsC
         loop
-            if ad.user_id = userId and ad.pass = passwd then
+            if ad.user_id = p_user_id and ad.pass = p_pass then
                 return true;
             end if;
         end loop;
@@ -100,27 +108,29 @@ as
 --        return false;
     end;
     
-    function userType(uid in number) return varchar2
+    function userType(p_user_id in number) return varchar2
     as
     begin
-        if uid > 1000 then
+        if p_user_id > 1000 then
             return 'student';
-        elsif uid = 0 then
+        elsif p_user_id = 0 then
                 return 'admin';
         else 
             return 'professor';
         end if;
     end;
 
-    function getStudentData(studId in number, fullN out varchar2, phone out varchar2, 
-                         email out varchar2, addr out varchar2, sex out varchar2, y out number) return varchar2
+    function getStudentData(p_stud_id in number, p_full out varchar2, 
+                            p_phone out varchar2, p_email out varchar2, 
+                            p_addr out varchar2, p_sex out varchar2, 
+                            y out number) return varchar2
     as 
         deptN departments.dept_name%type;
     begin
         select f_name||' '||l_name, phone, email, address, gender, study_year, d.dept_name
-        into fullN, phone, email, addr, sex, y, deptN
+        into p_full, p_phone, p_email, p_addr, p_sex, y, deptN
         from students s join departments d on s.dept_id = d.dept_id
-        where studId = stud_id;
+        where stud_id = p_stud_id;
         
         return deptN;
         
@@ -129,15 +139,16 @@ as
             raise_application_error(-20001, 'STUDENT_NOT_FOUND');
     end;
     
-    function getProfData(profid in number, fullN out varchar2, phone out varchar2, 
-                         email out varchar2) return varchar2
+    function getProfData(p_prof_id in number, p_full out varchar2, 
+                         p_phone out varchar2, p_email out varchar2) 
+                         return varchar2
     as 
         deptN departments.dept_name%type;
     begin
         select f_name||' '||l_name, phone, email, d.dept_name
-        into fullN, phone, email, deptN
+        into p_full, p_phone, p_email, deptN
         from professors p join departments d on p.dept_id = d.dept_id
-        where profid = prof_id;
+        where prof_id = p_prof_id;
         
         return deptN;
         
@@ -146,7 +157,7 @@ as
             raise_application_error(-20002, 'PROFESSOR_NOT_FOUND');
     end;
     
-    function doCountStudentsInDept(d_id in number)
+    function doCountStudentsInDept(p_dept_id in number)
     return integer
     as 
         nstud integer default 0;
@@ -154,12 +165,12 @@ as
         select count(stud_id)
         into nstud
         from students s 
-        where s.dept_id = d_id;
+        where s.dept_id = p_dept_id;
             
         return nstud;
     end;
     
-    function doCountProfInDept(d_id in number, sys_ref out sys_refcursor)
+    function doCountProfInDept(p_dept_id in number, sys_ref out sys_refcursor)
     return integer
     as 
         nprof integer default 0;
@@ -167,16 +178,17 @@ as
         select count(prof_id)
         into nprof
         from professors p 
-        where p.dept_id = d_id;
+        where p.dept_id = p_dept_id;
         
         open sys_ref for
             select * from departments
-            where dept_id = d_id;
+            where dept_id = p_dept_id;
         
         return nprof;
     end;
     
-    function checkDept(d_id in number, d_name in varchar2) return boolean
+    function checkDept(p_dept_id in number, p_dept_name in varchar2) 
+                       return boolean
     as
         checked boolean;
         
@@ -186,9 +198,9 @@ as
     begin
         for d in dept
         loop
-            if d.dept_id = d_id then
+            if d.dept_id = p_dept_id then
                 return true;
-            elsif d.dept_name = d_name then
+            elsif d.dept_name = p_dept_name then
                 return true;
             end if;
         end loop;
@@ -219,7 +231,7 @@ as
     
     function countMen(modet in varchar2) return integer
     as
-    men integer:=0;
+        men integer:=0;
     begin
         if modet = 'stud' then
             select count(stud_id)
@@ -235,7 +247,7 @@ as
         return men;
     end;
     
-    function addCourseStud(stud_id in number, course_id in number)
+    function addCourseStud(p_stud_id in number, p_course_id in number)
     return boolean
      as
         cursor courses_c is
@@ -245,16 +257,36 @@ as
      begin
         for c in courses_c
         loop
-            if c.stud_id = stud_id and c.course_id = course_id then
+            if c.stud_id = p_stud_id and c.course_id = p_course_id then
                 exist := true;
                 return false;
             end if;
         end loop;
         
-        insert into student_records values(stud_id, course_id, 0, null);
+        insert into student_records values(p_stud_id, p_course_id, 0, null);
         return true;
         
      end;
+     
+         
+    function addGivenCourse(p_course_id in number, p_prof_id in number)
+    return boolean
+    is
+        cursor courses_c is
+            select course_id from given_courses where prof_id = p_prof_id;
+        exist boolean;
+    begin
+        for c in courses_c
+        loop
+            if c.course_id = p_course_id then
+                return False;
+            end if;
+        end loop;
+        
+        insert into given_courses values(p_course_id, p_prof_id);
+        return True;
+    end;
+    
  
     
 end functions_pck;

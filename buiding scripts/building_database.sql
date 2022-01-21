@@ -83,8 +83,7 @@ alter table student_records add(
 );
 
 create table logedin(
-    user_id number(10),
-    constraint li_pk primary key(user_id)
+    user_id number(10)
 );
 
 create table admins(

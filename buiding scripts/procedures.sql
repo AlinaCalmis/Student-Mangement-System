@@ -1,70 +1,73 @@
 create or replace package procedures_pck
 as
-    procedure addStudent(stud_id in number,
-                                       cnp in varchar2,
-                                       f_name in varchar2,
-                                       l_name in varchar2,
-                                       bd in varchar2,
-                                       phone in varchar2,
-                                       email in varchar2,
-                                       pass in varchar2,
-                                       addr in varchar2,
-                                       gender in varchar2,
-                                       enrolment in varchar2,
-                                       study_y in number,
-                                       dept_id in number
+    procedure addStudent(p_stud_id in number,
+                                       p_cnp in varchar2,
+                                       p_f_name in varchar2,
+                                       p_l_name in varchar2,
+                                       p_bd in varchar2,
+                                       p_phone in varchar2,
+                                       p_email in varchar2,
+                                       p_pass in varchar2,
+                                       p_addr in varchar2,
+                                       p_gender in varchar2,
+                                       p_enrolment in varchar2,
+                                       p_study_y in number,
+                                       p_dept_id in number
                                        );
                                        
-    procedure addProfessor(prof_id in number,
-                                         CNP in varchar2,
-                                         f_name in varchar2,
-                                         l_name in varchar2,
-                                         birth_date in varchar2,
-                                         phone in char,
-                                         email in char,
-                                         pass in char,
-                                         gender in char,
-                                         dept_id in number
+    procedure addProfessor(p_prof_id in number,
+                                         p_CNP in varchar2,
+                                         p_f_name in varchar2,
+                                         p_l_name in varchar2,
+                                         p_birth_date in varchar2,
+                                         p_phone in char,
+                                         p_email in char,
+                                         p_pass in char,
+                                         p_gender in char,
+                                         p_dept_id in number
                                          );
                                          
-    procedure addDepartment(dept_id in number, dept_name in varchar2);
+    procedure addDepartment(p_dept_id in number, p_dept_name in varchar2);
     
-    procedure addStudentRec (stud_id in number, course_id in number, 
-                             f_grade in number, passed in varchar2);
+    procedure addStudentRec (p_stud_id in number, p_course_id in number, 
+                             p_f_grade in number, p_passed in varchar2);
     
-    procedure addCourse(course_id in number,
-                                      course_name in varchar2,
-                                      credit_pts in number,
-                                      units in number
-                                      );
-    procedure addGivenCourse(course_id in number, professor_id in number);
-    procedure loginUser(user_id in number);
+    procedure addCourse(p_course_id in number,
+                                          p_course_name in varchar2,
+                                          p_credit_pts in number,
+                                          p_units in number
+                                          );
+                                      
+    procedure loginUser(p_user_id in number, p_user_type in varchar2, 
+                        sys_ref out sys_refcursor);
     
-    procedure logoutUser(user_id in number);
+    procedure logoutUser(p_user_id in number);
     
-    procedure removeGivenCourse(course_id in number, professor_id in number);
+    procedure removeGivenCourse(p_course_id in number, 
+                                p_prof_id in number);
     
-    procedure removeCourse(c_id in number);
+    procedure removeCourse(p_course_id in number);
     
-    procedure removeDepartment(d_id in number);
+    procedure removeDepartment(p_dept_id in number);
     
-    procedure removeProfessor(p_id in number);
+    procedure removeProfessor(p_prof_id in number);
     
-    procedure removeStudent(s_id in number);
+    procedure removeStudent(p_stud_id in number);
     
-    procedure removeStudRecord(s_id in number, c_id in number);
+   procedure removeStudRecord(p_stud_id in number, p_course_id in number);
         
     procedure showCourses(sys_ref out sys_refcursor);
     procedure showDepts(sys_ref out sys_refcursor);
-    procedure getAllInfoStudent(s_id in number, sys_ref out sys_refcursor);
-    procedure getAllInfoProf(p_id in number, sys_ref out sys_refcursor);
+    procedure getAllInfoStudent(p_stud_id in number, sys_ref out sys_refcursor);
+    procedure getAllInfoProf(p_prof_id in number, sys_ref out sys_refcursor);
     procedure showProfessors(sys_ref out sys_refcursor);
-    procedure showProfCourses(sys_ref out sys_refcursor);
-    procedure getCourseData(c_id in number, sys_out out sys_refcursor);
+    procedure showProfCourses(p_prof_id in number,sys_ref out sys_refcursor);
+    procedure getCourseData(p_course_id in number, sys_out out sys_refcursor);
     procedure showStudents(modet in varchar2, sys_ref out sys_refcursor);
     procedure studyYears(sys_ref out sys_refcursor);
-    procedure showStudCourses(stud_id in number, sys_ref out sys_refcursor);
-    procedure updateCourseStud(studid in number, courseid in number, grade in number);
+    procedure showStudCourses(p_stud_id in number, sys_ref out sys_refcursor);
+    procedure updateCourseStud(p_stud_id in number, p_course_id in number, 
+                               p_grade in number);
     
 end procedures_pck;
 /
@@ -72,132 +75,157 @@ end procedures_pck;
 create or replace package body procedures_pck
 as
 ------ add ------
-    procedure addStudent(stud_id in number,
-                                       cnp in varchar2,
-                                       f_name in varchar2,
-                                       l_name in varchar2,
-                                       bd in varchar2,
-                                       phone in varchar2,
-                                       email in varchar2,
-                                       pass in varchar2,
-                                       addr in varchar2,
-                                       gender in varchar2,
-                                       enrolment in varchar2,
-                                       study_y in number,
-                                       dept_id in number
+    procedure addStudent(p_stud_id in number,
+                                       p_cnp in varchar2,
+                                       p_f_name in varchar2,
+                                       p_l_name in varchar2,
+                                       p_bd in varchar2,
+                                       p_phone in varchar2,
+                                       p_email in varchar2,
+                                       p_pass in varchar2,
+                                       p_addr in varchar2,
+                                       p_gender in varchar2,
+                                       p_enrolment in varchar2,
+                                       p_study_y in number,
+                                       p_dept_id in number
                                        )
     is
     begin
-        insert into students values(stud_id, cnp, f_name, l_name, to_date(bd,'dd-mm-yyyy'), phone, email, pass, addr, gender, to_date(enrolment,'dd-mm-yyyy'), study_y, dept_id);
+        insert into students values(p_stud_id, p_cnp, p_f_name, p_l_name, 
+                                    to_date(p_bd,'dd-mm-yyyy'), p_phone, 
+                                    p_email, p_pass, p_addr, p_gender, 
+                                    to_date(p_enrolment,'dd-mm-yyyy'), 
+                                    p_study_y, p_dept_id);
     end;
 
-    procedure addProfessor(prof_id in number,
-                                         CNP in varchar2,
-                                         f_name in varchar2,
-                                         l_name in varchar2,
-                                         birth_date in varchar2,
-                                         phone in char,
-                                         email in char,
-                                         pass in char,
-                                         gender in char,
-                                         dept_id in number
+    procedure addProfessor(p_prof_id in number,
+                                         p_CNP in varchar2,
+                                         p_f_name in varchar2,
+                                         p_l_name in varchar2,
+                                         p_birth_date in varchar2,
+                                         p_phone in char,
+                                         p_email in char,
+                                         p_pass in char,
+                                         p_gender in char,
+                                         p_dept_id in number
                                          )
     is
     begin
-        insert into professors values(prof_id,CNP,f_name,l_name,to_date(birth_date, 'dd-MM-yyyy'),phone,email,pass,gender,dept_id);
+        insert into professors values(p_prof_id, p_CNP, p_f_name, p_l_name,
+                                      to_date(p_birth_date, 'dd-MM-yyyy'),
+                                      p_phone, p_email, p_pass, p_gender, 
+                                      p_dept_id);
     end;
 
-    procedure addDepartment(dept_id in number, dept_name in varchar2)
+    procedure addDepartment(p_dept_id in number, p_dept_name in varchar2)
     is
     begin
-        insert into departments values(dept_id, dept_name);
+        insert into departments values(p_dept_id, p_dept_name);
     end;
 
-    procedure addStudentRec (stud_id in number, course_id in number, f_grade in number, passed in varchar2)
+    procedure addStudentRec (p_stud_id in number, p_course_id in number, 
+                             p_f_grade in number, p_passed in varchar2)
     is
     begin
-        insert into  student_records values(stud_id, course_id, f_grade, passed);
+        insert into student_records values(p_stud_id, p_course_id, p_f_grade, 
+                                           p_passed);
     end;
     
     
-    procedure addCourse(course_id in number,
-                                          course_name in varchar2,
-                                          credit_pts in number,
-                                          units in number
+    procedure addCourse(p_course_id in number,
+                                          p_course_name in varchar2,
+                                          p_credit_pts in number,
+                                          p_units in number
                                           )
     is
     begin
-        insert into courses values(course_id, course_name, credit_pts, units);
+        insert into courses values(p_course_id, p_course_name, p_credit_pts, 
+                                   p_units);
     end;
-    
-    procedure addGivenCourse(course_id in number, professor_id in number)
+
+    procedure loginUser(p_user_id in number, p_user_type in varchar2, 
+                        sys_ref out sys_refcursor)
     is
     begin
-        insert into given_courses values(course_id, professor_id);
+        insert into logedin values(p_user_id);
+        
+        if p_user_type = 'professor' then
+            open sys_ref for
+                select * from professors
+                where prof_id = p_user_id;
+        elsif p_user_type = 'student' then
+            open sys_ref for
+                select * from students
+                where stud_id = p_user_id;
+        else 
+            open sys_ref for 
+            select * from admins s
+            where s.user_id = p_user_id;
+        end if;
     end;
     
-    procedure loginUser(user_id in number)
+    procedure logoutUser(p_user_id in number)
     is
     begin
-        insert into logedin values(user_id);
-    end;
-    
-    procedure logoutUser(user_id in number)
-    is
-    begin
-        delete from logedin where user_id=user_id;
+        delete from logedin where user_id = p_user_id;
     end;
     
     
     ------ remove -----
     
-    procedure removeGivenCourse(course_id in number, professor_id in number)
+    procedure removeGivenCourse(p_course_id in number, p_prof_id in number)
     is 
     begin
-        delete from given_courses g
-        where g.course_id = course_id and g.prof_id = professor_id;
+        delete from given_courses
+        where course_id = p_course_id and prof_id = p_prof_id;
     end;
     
-    procedure removeCourse(c_id in number)
+    procedure removeCourse(p_course_id in number)
     is
     begin
         delete from courses
-        where course_id = c_id;
+        where course_id = p_course_id;
     end;
     
-    procedure removeDepartment(d_id in number)
+    procedure removeDepartment(p_dept_id in number)
     is
     begin
         delete from departments
-        where dept_id = d_id;
+        where dept_id = p_dept_id;
     end;
     
-    procedure removeProfessor(p_id in number)
+    procedure removeProfessor(p_prof_id in number)
     is
     begin
+        delete from given_courses
+        where prof_id = p_prof_id;
+        
         delete from professors
-        where prof_id = p_id;
+        where prof_id = p_prof_id;
     end;
     
-    procedure removeStudent(s_id in number)
-    is
-    begin
-        delete from students
-        where stud_id = s_id;
-    end;
-    
-    
-    procedure removeStudRecord(s_id in number, c_id in number)
+    procedure removeStudent(p_stud_id in number)
     is
     begin
         delete from student_records
-        where stud_id = s_id and course_id = c_id;
+        where stud_id = p_stud_id;
+        
+        delete from students
+        where stud_id = p_stud_id;
+    end;
+    
+    
+    procedure removeStudRecord(p_stud_id in number, p_course_id in number)
+    is
+    begin
+        delete from student_records
+        where stud_id = p_stud_id and course_id = p_course_id;
     end;
 
     procedure showCourses(sys_ref out sys_refcursor)
     is
     begin
-        open sys_ref  for select * from courses;
+        open sys_ref for select * from courses;
     end;
     
     procedure showDepts(sys_ref out sys_refcursor)
@@ -209,7 +237,7 @@ as
         order by dept_id;
     end;
 
-    procedure getAllInfoStudent(s_id in number, sys_ref out sys_refcursor)
+    procedure getAllInfoStudent(p_stud_id in number, sys_ref out sys_refcursor)
     is
     begin
         open sys_ref for
@@ -227,10 +255,10 @@ as
                     S.STUDY_YEAR ,
                     D.DEPT_NAME  
             from students s join departments d on s.dept_id = d.dept_id
-            where stud_id = s_id;  
+            where stud_id = p_stud_id;  
     end;
     
-    procedure getAllInfoProf(p_id in number, sys_ref out sys_refcursor)
+    procedure getAllInfoProf(p_prof_id in number, sys_ref out sys_refcursor)
     is
     begin
         open sys_ref for
@@ -245,7 +273,7 @@ as
                     GENDER ,
                     DEPT_ID  
             from professors
-            where p_id = prof_id;
+            where prof_id = p_prof_id;
     end;
     
     procedure showProfessors(sys_ref out sys_refcursor)
@@ -259,27 +287,40 @@ as
                     EMAIL ,
                     DEPT_ID  
             from professors 
-            order by dept_id,prof_id;
+            order by dept_id, prof_id;
     end;
     
-    procedure showProfCourses(sys_ref out sys_refcursor)
+    procedure showProfCourses(p_prof_id in number, sys_ref out sys_refcursor)
     is
     begin
         open sys_ref for
-            select *
-            from  given_courses;
+            select g.course_id, c.course_name
+            from  given_courses g 
+            inner join courses c 
+            on g.course_id=c.course_id
+            where g.prof_id = p_prof_id;
     end;
     
     
-    procedure getCourseData(c_id in number, sys_out out sys_refcursor)
+    procedure getCourseData(p_course_id in number, sys_out out sys_refcursor)
     as
     begin
         open sys_out for
-            select c.course_id, c.course_name, c.credit_pts, c.units, p.full_name, p.prof_id
+            select c.course_id, 
+                   c.course_name, 
+                   c.credit_pts, 
+                   c.units, 
+                   p.full_name, 
+                   p.prof_id
             from courses c
-            full join (select a.prof_id, a.f_name ||' '|| a.l_name as full_name, b.course_id
-                from professors a inner join given_courses b on b.prof_id = a.prof_id) p on c.course_id = p.course_id
-            where c.course_id = c_id;
+            full join (
+                        select a.prof_id, a.f_name||' '||a.l_name as full_name, 
+                               b.course_id
+                        from professors a 
+                        inner join given_courses b 
+                        on b.prof_id = a.prof_id
+                        ) p on c.course_id = p.course_id
+            where c.course_id = p_course_id;
     end;
     
     procedure showStudents(modet in varchar2, sys_ref out sys_refcursor)
@@ -319,31 +360,34 @@ as
             order by 1;
     end;
     
-    procedure showStudCourses(stud_id in number, sys_ref out sys_refcursor)
+    procedure showStudCourses(p_stud_id in number, sys_ref out sys_refcursor)
     as
     begin
         open sys_ref for
-            select c.course_id, c.course_name, r.f_grade, r.passed
-            from courses c inner join student_records r on c.course_id = r.course_id
-            where r.stud_id = stud_id;
+            select c.course_id, c.course_name, r.f_grade, r.passed, r.stud_id
+            from courses c 
+            inner join student_records r 
+            on c.course_id = r.course_id
+            where r.stud_id = p_stud_id;
        
 
     end;
     
      
      
-    procedure updateCourseStud(studid in number, courseid in number, grade in number)
+    procedure updateCourseStud(p_stud_id in number, p_course_id in number, 
+                               p_grade in number)
     as
         do_pass varchar2(5);
     begin
-        if grade >= 5 then do_pass := 'yes';
+        if p_grade >= 5 then do_pass := 'yes';
         else do_pass := 'no';
         end if;
         
         update student_records 
-        set f_grade = grade,
+        set f_grade = p_grade,
             passed = do_pass
-        where stud_id = studid and course_id = courseid;
+        where stud_id = p_stud_id and course_id = p_course_id;
     end;
     
 end procedures_pck;

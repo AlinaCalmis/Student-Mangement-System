@@ -1,17 +1,167 @@
 {% extends "layout.html" %}
 {% block content %}
-        <div class="container  border ">
-            <div class="p-3 row">
-                <h3><b>Professor <i>{{professor_data.Name}}</i></b></h3>
+<div class="container">
+
+            {% if type == 'professor' %}
+    <div class="content-section">
+                <table class="table">
+                    <h2>Professor details</h2>
+                    <tbody>
+                    {% for detail in user_data %}
+                        <tr>
+                            <th scope="row">Professor ID</th>
+                            <td>{{detail.0}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Professor Name</th>
+                            <td>{{detail.2}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">CNP</th>
+                            <td>{{detail.1}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Birth date</th>
+                            <td>{{detail.3}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Phone</th>
+                            <td>{{detail.4}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email</th>
+                            <td>{{detail.5}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Password</th>
+                            <td>{{detail.6}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Gender</th>
+                            <td>{{detail.7}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Department</th>
+                            <td>{{detail.8}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="p-3 row">
-                <h5>Phone:  {{professor_data.Phone}}</h5>
+            <div class="content-section">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"> Course</th>
+                            <th scope="col"> Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in courses %}
+                        <tr>
+                            <td> {{c.1}} </td>
+                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('course_details', course_id = c.0 ) }}">Details</a> </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="p-3 row">
-                <h5>Email:  {{professor_data.Email}}</h5>
-            </div>
-            <div class="p-3 row">
-                <h5>Department: {{professor_data.DeptName}}</h5>
-            </div>
+            {% else%}
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="content-section">
+                                     <table class="table">
+                                        <h2>Student details</h2>
+                                        <tbody>
+                                        {% for detail in user_data %}
+                                            <tr>
+                                                <th scope="row">Student ID</th>
+                                                <td>{{detail.0}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Student Name</th>
+                                                <td>{{detail.2}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">CNP</th>
+                                                <td>{{detail.1}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Birth Date</th>
+                                                <td>{{detail.3}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Phone</th>
+                                                <td>{{detail.4}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Address</th>
+                                                <td>{{detail.7}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Email</th>
+                                                <td>{{detail.5}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Password</th>
+                                                <td>{{detail.6}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Gender</th>
+                                                <td>{{detail.8}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Enrolment Date</th>
+                                                <td>{{detail.9}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Study Year</th>
+                                                <td>{{detail.10}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Department</th>
+                                                <td>{{detail.11}}</td>
+                                            </tr>
+                                <!--        {% endfor %}-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content-section">
+
+                                     <table class="table">
+                                         <div class="row">
+                                             <div class="col text-center">
+                                                 <h4>Student courses </h4>
+                                             </div>
+                                         </div>
+
+                                         <thead>
+                                            <th scope="col">Course name</th>
+                                            <th scope="col">Final grade</th>
+                                            <th scope="col">Exam</th>
+                                         </thead>
+                                        <tbody>
+                                        {% if courses %}
+                                            {% for detail in courses %}
+                                                <tr>
+                                                    <td>{{detail.1}}</td>
+                                                    <td>{{detail.2}}</td>
+                                                    <td>{{detail.3}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
         </div>
+<!--</div>-->
 {% endblock content %}

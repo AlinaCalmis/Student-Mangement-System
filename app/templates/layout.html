@@ -35,10 +35,8 @@
             <div class="navbar-nav">
                 {% if session.active %}
                     {% if session.type == "professor" %}
-                        <a class="nav-item nav-link" href="/dashboard_professor">Dashboard</a>
                         <a class="nav-item nav-link" href="/personal_data">Personal data</a>
                     {% elif session.type == "student" %}
-                        <a class="nav-item nav-link" href="/dashboard_student">Dashboard</a>
                         <a class="nav-item nav-link" href="/personal_data">Personal data</a>
                     {% else %}
                         <a class="nav-item nav-link" href="/dashboard_admin">Dashboard</a>
