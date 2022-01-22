@@ -55,9 +55,13 @@ def logout():
 
 @app.route('/dashboard_admin', methods=["GET", "POST"])
 def dashboard_admin():
-    with DBC() as db:
-        courses = db.showCourses()
-    return render_template('dashboard_admin.html', courses=courses)
+    if session['uid'] == '0':
+        with DBC() as db:
+            courses = db.showCourses()
+        return render_template('dashboard_admin.html', courses=courses)
+    else:
+        flash('You are not an administrator!', 'danger')
+        return redirect(url_for('personal_data'))
 
 
 @app.route('/personal_data', methods=["GET", "POST"])
@@ -90,7 +94,11 @@ def single_dept(dept_id):
 @app.route('/dashboard_admin/delete_department/<int:dept_id>', methods=["GET", "POST"])
 def delete_dept(dept_id):
     with DBC() as db:
-        db.removeDept(dept_id)
+        if db.removeDept(dept_id):
+            flash('Department deleted successfully', 'success')
+        else:
+            flash('Something went wrong. Department has students and/or professors. '
+                  'You cannot delete this', 'danger')
     return redirect(url_for('manage_departments'))
 
 
@@ -202,7 +210,7 @@ def add_course():
             with DBC() as db:
                 add = db.addCourse(form.name.data, form.pts.data, form.units.data)
             if add:
-                flash("New course added successfully", 'succes')
+                flash("New course added successfully", 'success')
                 return redirect(url_for('manage_courses'))
     return render_template('/dashboard_admin/add_course.html', form=form)
 
@@ -308,9 +316,9 @@ def add_student():
                                     form.year.data,
                                     form.dept.data)
             if add:
-                flash('Student added successfully.', 'succes')
+                flash('Student added successfully.', 'success')
                 return redirect(url_for('manage_students'))
-            flash('An error occured. Check data.', 'danger')
+            flash('An error occurred. Check data.', 'danger')
     return render_template('/dashboard_admin/manage_students/add_student.html', form=form)
 
 

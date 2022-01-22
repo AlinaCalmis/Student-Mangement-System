@@ -321,6 +321,10 @@ class OracleConnection:
 
     def addStudent(self, cnp, f, l, bd, phone, email, add, gender, enr, year, dept):
         try:
+            if gender == 'M':
+                gender = 'male'
+            elif gender == 'F':
+                gender = 'female'
             self.cursor.callproc("procedures_pck.addStudent",
                                  (0, cnp, f, l, bd, phone, email, 'student', add, gender,
                                   enr, int(year), int(dept)))

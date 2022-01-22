@@ -46,30 +46,34 @@
         {% endfor %}
         </tbody>
     </table>
-    <h2>Courses:
-        <div class = "btn-group">
-            <button class="btn btn-secondary dropdown-toggle block" type="button" id="btnDropdownDemo"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Add new course to {{prof.0.2}}
-            </button>
-
-            <div class="dropdown-menu" aria-labelledby="btnDropdownDemo">
-                {% for course in courses %}
-               <a class = "dropdown-item"
-                  href = "{{url_for('add_course_prof', prof_id = prof.0.0, course_id = course.0)}}">{{course.1}}
-               </a>
-                {% endfor %}
+    <div class="container">
+        <h2>Courses:
+            <div class = "btn-group">
+                {% if session.uid == '0' %}
+                    <button class="btn btn-secondary dropdown-toggle block" type="button" id="btnDropdownDemo"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Add new course to {{prof.0.2}}
+                    </button>
+                {% endif %}
+                <div class="dropdown-menu" aria-labelledby="btnDropdownDemo">
+                    {% for course in courses %}
+                    <a class = "dropdown-item"
+                       href = "{{url_for('add_course_prof', prof_id = prof.0.0, course_id = course.0)}}">{{course.1}}
+                    </a>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    </h2>
-
+        </h2>
+    </div>
 
     <table class="table">
         <thead>
             <tr>
                 <th scope="col"> Course</th>
                 <th scope="col"> Details</th>
-                <th scope="col"> Delete</th>
+                {% if session.uid == '0' %}
+                    <th scope="col"> Delete</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -79,14 +83,17 @@
                     <td> {{c.1}} </td>
                     <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{ url_for('course_details', course_id = c.0 ) }}">
                         Details</a> </td>
+                    {% if session.uid == '0' %}
                     <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke"
                            href="{{ url_for('delete_course_prof', prof_id = prof.0.0, course_id = c.0 ) }}">
                         Delete</a> </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         {% endif %}
         </tbody>
     </table>
+
 
 </div>
 {% endblock content %}

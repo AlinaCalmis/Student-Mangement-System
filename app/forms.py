@@ -49,7 +49,7 @@ class AddProfessor(FlaskForm):
     email = StringField(validators=[InputRequired(), Length(min=12, max=50)],
                         render_kw={"placeholder": "Email"})
     gender = RadioField('Gender', choices=[('M', 'male'), ('F', 'female')])
-    dept = StringField(validators=[InputRequired(), Length(min=4, max=5)],
+    dept = StringField(validators=[InputRequired(), Length(min=1, max=5)],
                        render_kw={"placeholder": "Department"})
     submit = SubmitField("Add professor")
 
