@@ -10,25 +10,16 @@ as
                          return boolean;
     ----------- Check user type(user is logged in)-------------
     function userType(p_user_id in number) return varchar2;
-    ----------- Get Student Personal DATA------------
-    function getStudentData(p_stud_id in number, p_full out varchar2, 
-                            p_phone out varchar2, p_email out varchar2, 
-                            p_addr out varchar2, p_sex out varchar2, 
-                            y out number) return varchar2;
-    ----------- Get Proessors Data ------------------
-    function getProfData(p_prof_id in number, p_full out varchar2, 
-                         p_phone out varchar2, p_email out varchar2) 
-                         return varchar2;
-                         
+    
     function doCountProfInDept(p_dept_id in number, sys_ref out sys_refcursor)
                                 return integer;
     function doCountStudentsInDept(p_dept_id in number)return integer;
     
     function checkDept(p_dept_id in number, p_dept_name in varchar2) return boolean;
     
-    function studGender(sys_ref out sys_refcursor) return integer;
+    function doCountFemale(sys_ref out sys_refcursor) return integer;
 
-    function countMen(modet in varchar2) return integer;
+    function doCountMen(modet in varchar2) return integer;
     
     function addCourseStud(p_stud_id in number, p_course_id in number) 
                            return boolean;
@@ -212,7 +203,7 @@ as
                 return false;
     end;
 
-    function studGender(sys_ref out sys_refcursor) return integer
+    function doCountFemale(sys_ref out sys_refcursor) return integer
     as 
         female integer;
     begin
@@ -229,7 +220,7 @@ as
         return female;
     end;
     
-    function countMen(modet in varchar2) return integer
+    function doCountMen(modet in varchar2) return integer
     as
         men integer:=0;
     begin

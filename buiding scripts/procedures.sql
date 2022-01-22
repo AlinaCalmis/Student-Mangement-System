@@ -147,7 +147,7 @@ as
                         sys_ref out sys_refcursor)
     is
     begin
-        insert into logedin values(p_user_id);
+        insert into loggedin values(p_user_id);
         
         if p_user_type = 'professor' then
             open sys_ref for
@@ -167,7 +167,7 @@ as
     procedure logoutUser(p_user_id in number)
     is
     begin
-        delete from logedin where user_id = p_user_id;
+        delete from loggedin where user_id = p_user_id;
     end;
     
     

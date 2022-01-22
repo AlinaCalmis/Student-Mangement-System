@@ -268,11 +268,11 @@ class OracleConnection:
         try:
             return_type = cx_Oracle.DB_TYPE_NUMBER
             new_cursor = self.db.cursor()
-            fem = self.cursor.callfunc("functions_pck.studGender", return_type, (new_cursor, ))
+            fem = self.cursor.callfunc("functions_pck.doCountFemale", return_type, (new_cursor, ))
             gender_c = new_cursor.fetchall()
             gender = [list(s) for s in gender_c]
 
-            men = self.cursor.callfunc("functions_pck.countMen", return_type, ('stud', ))
+            men = self.cursor.callfunc("functions_pck.doCountMen", return_type, ('stud', ))
             gender[0].append(int(men))
             gender[1].append(int(fem))
 

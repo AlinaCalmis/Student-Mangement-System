@@ -55,8 +55,8 @@ alter table professors add(
 create table courses(
     course_id number(5) constraint c_id_nn not null,
     course_name varchar2(50) constraint cn_nn not null,
-    credit_pts number(2) default 1,
-    units number(3) default 1,
+    credit_pts number(2) default 5,
+    units number(3) default 8,
     constraint c_id primary key(course_id)
 );
 
@@ -82,13 +82,13 @@ alter table student_records add(
     constraint recc_id_fk foreign key(course_id) references courses(course_id)
 );
 
-create table logedin(
+create table loggedin(
     user_id number(10)
 );
 
 create table admins(
     user_id number(10),
-    pass varchar2(10),
+    pass varchar2(10) constraint apass_nn not null,
     constraint u_pk primary key(user_id)
 );
 
