@@ -99,9 +99,9 @@ def add_department():
     form = DepartmentForm()
     if form.validate_on_submit():
         with DBC() as db:
-            checked = db.checkDept(form.dept_id.data, form.dept_name.data)
+            checked = db.checkDept(form.dept_name.data)
             if not checked:
-                db.addDept(form.dept_id.data, form.dept_name.data)
+                db.addDept(form.dept_name.data)
                 flash('Department added to database successfully', 'success')
                 return redirect(url_for('manage_departments'))
         flash('Something went wrong. Check id or name and try again', 'danger')
@@ -156,7 +156,6 @@ def add_professor():
                                       form.bdate.data,
                                       form.phone.data,
                                       form.email.data,
-                                      form.passwd.data,
                                       form.gender.data,
                                       form.dept.data)
 
@@ -303,7 +302,6 @@ def add_student():
                                     form.bdate.data,
                                     form.phone.data,
                                     form.email.data,
-                                    form.passwd.data,
                                     form.address.data,
                                     form.gender.data,
                                     form.enrolment.data,

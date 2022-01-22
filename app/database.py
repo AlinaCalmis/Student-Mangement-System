@@ -132,18 +132,18 @@ class OracleConnection:
         except cx_Oracle.DatabaseError as e:
             return False
 
-    def addDept(self, uid, name):
+    def addDept(self, name):
         try:
-            self.cursor.callproc("procedures_pck.addDepartment", (uid, name))
+            self.cursor.callproc("procedures_pck.addDepartment", (0, name))
             self.db.commit()
             return True
         except cx_Oracle.DatabaseError as e:
             return False
 
-    def checkDept(self, uid, name):
+    def checkDept(self, name):
         try:
             return_type = cx_Oracle.DB_TYPE_BOOLEAN
-            return self.cursor.callfunc("functions_pck.checkDept", return_type, (uid, name))
+            return self.cursor.callfunc("functions_pck.checkDept", return_type, (name))
         except cx_Oracle.DatabaseError as e:
             print(e)
 
@@ -166,9 +166,9 @@ class OracleConnection:
         except cx_Oracle.DatabaseError as e:
             return False
 
-    def addProfessor(self, cnp, fn, ln, bd, phone, email, password, gen, dept):
+    def addProfessor(self, cnp, fn, ln, bd, phone, email, gen, dept):
         try:
-            self.cursor.callproc("procedures_pck.addProfessor", (0, cnp, fn, ln, bd, phone, email, password, gen, dept))
+            self.cursor.callproc("procedures_pck.addProfessor", (0, cnp, fn, ln, bd, phone, email, 'professor', gen, dept))
             self.db.commit()
             return True
         except cx_Oracle.DatabaseError as e:
@@ -319,10 +319,10 @@ class OracleConnection:
             print(e)
             return False
 
-    def addStudent(self, cnp, f, l, bd, phone, email, passwd, add, gender, enr, year, dept):
+    def addStudent(self, cnp, f, l, bd, phone, email, add, gender, enr, year, dept):
         try:
             self.cursor.callproc("procedures_pck.addStudent",
-                                 (0, cnp, f, l, bd, phone, email, passwd, add, gender,
+                                 (0, cnp, f, l, bd, phone, email, 'student', add, gender,
                                   enr, int(year), int(dept)))
             self.db.commit()
             return True

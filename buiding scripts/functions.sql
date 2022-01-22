@@ -13,7 +13,7 @@ as
                                 return integer;
     function doCountStudentsInDept(p_dept_id in number)return integer;
     
-    function checkDept(p_dept_id in number, p_dept_name in varchar2) 
+    function checkDept(p_dept_name in varchar2) 
                        return boolean;
     
     function doCountFemale(sys_ref out sys_refcursor) return integer;
@@ -177,7 +177,7 @@ as
         return nprof;
     end;
     
-    function checkDept(p_dept_id in number, p_dept_name in varchar2) 
+    function checkDept(p_dept_name in varchar2) 
                        return boolean
     as
         checked boolean;
@@ -188,9 +188,7 @@ as
     begin
         for d in dept
         loop
-            if d.dept_id = p_dept_id then
-                return true;
-            elsif d.dept_name = p_dept_name then
+            if d.dept_name = p_dept_name then
                 return true;
             end if;
         end loop;

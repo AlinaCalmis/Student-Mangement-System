@@ -25,8 +25,6 @@ class LoginForm(FlaskForm):
 
 
 class DepartmentForm(FlaskForm):
-    dept_id = StringField(validators=[InputRequired(), Length(min=4, max=10)],
-                          render_kw={"placeholder": "Department ID"})
     dept_name = StringField(validators=[InputRequired(), Length(min=4, max=100)],
                             render_kw={"placeholder": "Department Name"})
     submit = SubmitField("Add")
@@ -50,8 +48,6 @@ class AddProfessor(FlaskForm):
                         render_kw={"placeholder": "Phone"})
     email = StringField(validators=[InputRequired(), Length(min=12, max=50)],
                         render_kw={"placeholder": "Email"})
-    passwd = PasswordField(validators=[InputRequired(), Length(min=5, max=50)],
-                           render_kw={"placeholder": "Password"})
     gender = RadioField('Gender', choices=[('M', 'male'), ('F', 'female')])
     dept = StringField(validators=[InputRequired(), Length(min=4, max=5)],
                        render_kw={"placeholder": "Department"})
@@ -73,14 +69,12 @@ class AddStudent(FlaskForm):
                           render_kw={"placeholder": "Address"})
     email = StringField(validators=[InputRequired(), Length(min=12, max=50)],
                         render_kw={"placeholder": "Email"})
-    passwd = PasswordField(validators=[InputRequired(), Length(min=5, max=50)],
-                           render_kw={"placeholder": "Password"})
     gender = RadioField('Gender', choices=[('M', 'male'), ('F', 'female')])
     enrolment = StringField(validators=[InputRequired(), Length(min=10, max=50)],
                             render_kw={"placeholder": "Enrolment Date"})
     year = StringField(validators=[InputRequired(), Length(min=1, max=50)],
                        render_kw={"placeholder": "Study Year"})
-    dept = StringField(validators=[InputRequired(), Length(min=4, max=5)],
+    dept = StringField(validators=[InputRequired(), Length(min=1, max=5)],
                        render_kw={"placeholder": "Department"})
     submit = SubmitField("Add student")
 
