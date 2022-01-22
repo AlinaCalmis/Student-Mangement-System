@@ -133,7 +133,7 @@ def single_professor(prof_id):
         my_courses = db.showProfCourses(prof_id)
         prof = db.getAllInfoProf(prof_id)
     return render_template('dashboard_admin/single_professor.html', prof=prof, courses=courses,
-                           my_courses=my_courses)
+                           my_courses=my_courses, session=session)
 
 
 @app.route('/dashboard_admin/delete_course_prof/<int:prof_id>/<int:course_id>', methods=['GET', 'POST'])

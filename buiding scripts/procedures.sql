@@ -29,9 +29,6 @@ as
                                          
     procedure addDepartment(p_dept_id in number, p_dept_name in varchar2);
     
-    procedure addStudentRec (p_stud_id in number, p_course_id in number, 
-                             p_f_grade in number, p_passed in varchar2);
-    
     procedure addCourse(p_course_id in number,
                                           p_course_name in varchar2,
                                           p_credit_pts in number,
@@ -54,18 +51,28 @@ as
     
     procedure removeStudent(p_stud_id in number);
     
-   procedure removeStudRecord(p_stud_id in number, p_course_id in number);
+    procedure removeStudRecord(p_stud_id in number, p_course_id in number);
         
     procedure showCourses(sys_ref out sys_refcursor);
+    
     procedure showDepts(sys_ref out sys_refcursor);
+    
     procedure getAllInfoStudent(p_stud_id in number, sys_ref out sys_refcursor);
+    
     procedure getAllInfoProf(p_prof_id in number, sys_ref out sys_refcursor);
+    
     procedure showProfessors(sys_ref out sys_refcursor);
+   
     procedure showProfCourses(p_prof_id in number,sys_ref out sys_refcursor);
+    
     procedure getCourseData(p_course_id in number, sys_out out sys_refcursor);
+    
     procedure showStudents(modet in varchar2, sys_ref out sys_refcursor);
+    
     procedure studyYears(sys_ref out sys_refcursor);
+    
     procedure showStudCourses(p_stud_id in number, sys_ref out sys_refcursor);
+    
     procedure updateCourseStud(p_stud_id in number, p_course_id in number, 
                                p_grade in number);
     

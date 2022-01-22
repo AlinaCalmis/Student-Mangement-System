@@ -29,10 +29,12 @@
                 <th scope="row">Email</th>
                 <td>{{detail.5}}</td>
             </tr>
-            <tr>
-                <th scope="row">Password</th>
-                <td>{{detail.6}}</td>
-            </tr>
+            {% if session.uid == detail.0 or session.username == 'Admin' %}
+                <tr>
+                    <th scope="row">Password</th>
+                    <td>{{detail.6}}</td>
+                </tr>
+            {% endif %}
             <tr>
                 <th scope="row">Gender</th>
                 <td>{{detail.7}}</td>

@@ -2,20 +2,19 @@
 
 create or replace package functions_pck
 as
-
-    ----------- Checks whether a student exists or not---------
     function isUserRegistered(p_user_id in number) return boolean;
-    ----------- Check credentials -----------------------------
+    
     function checkPasswd(p_user_id in number, p_pass in varchar2) 
                          return boolean;
-    ----------- Check user type(user is logged in)-------------
+                         
     function userType(p_user_id in number) return varchar2;
     
     function doCountProfInDept(p_dept_id in number, sys_ref out sys_refcursor)
                                 return integer;
     function doCountStudentsInDept(p_dept_id in number)return integer;
     
-    function checkDept(p_dept_id in number, p_dept_name in varchar2) return boolean;
+    function checkDept(p_dept_id in number, p_dept_name in varchar2) 
+                       return boolean;
     
     function doCountFemale(sys_ref out sys_refcursor) return integer;
 
@@ -25,7 +24,7 @@ as
                            return boolean;
     
     function addGivenCourse(p_course_id in number, p_prof_id in number)
-    return boolean;
+                            return boolean;
 
 end functions_pck;
 /

@@ -92,26 +92,7 @@ create table admins(
     constraint u_pk primary key(user_id)
 );
 
---create sequence sidInsert
---increment by 1
---start with 1000;
---
---create or replace trigger studInsert
---before insert on students for each row
---begin
---    :new.stud_id:=sidInsert.nextval;
---end;
---/
-
---insert into given_courses values();
-
 select * from departments;
 select * from students;
 select * from professors;
 select * from courses;
---drop table student_records;
---drop table given_courses;
---drop table courses;
---drop table students;
---drop table professors;
---drop table departments;

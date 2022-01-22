@@ -1,16 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="content-section">
   <h1>Add new department</h1>
   <form method="POST" action="">
       {{ form.hidden_tag() }}
-<!--      <div class="mb-2">-->
-<!--          <label for="dept_id" class="form-label">Department ID</label>-->
-<!--          <input type="text" class="form-control" id="dept_id" name="ID">-->
-<!--      </div>-->
-<!--      <div class="mb-2">-->
-<!--          <label for="dept_name" class="form-label">Department Name</label>-->
-<!--          <input type="text" class="form-control" id="dept_name" name="Name">-->
-<!--      </div>-->
       <fieldset class="form-group">
       <div class="form-group">
               {{ form.dept_id.label(class="from-control-label") }}
@@ -45,4 +38,5 @@
           {{form.submit(class="btn btn-outline-info")}}
       </div>
   </form>
+</div>
 {% endblock content %}
