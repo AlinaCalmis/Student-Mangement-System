@@ -153,7 +153,6 @@ class OracleConnection:
             new_cursor = self.db.cursor()
             self.cursor.callproc("procedures_pck.showProfessors", (new_cursor, ))
             profs_c = new_cursor.fetchall()
-            new_cursor.close()
             profs = [list(p) for p in profs_c]
             new_cursor.close()
             return profs

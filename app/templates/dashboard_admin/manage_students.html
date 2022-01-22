@@ -29,37 +29,37 @@
         </tbody>
     </table>
     <div class="row"></div>
-        <div class="content-section">
+    <div class="content-section">
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">CNP</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Study Year</th>
-                    <th scope="col">Details</th>
-                    <th scope="col">Delete</th>
-                </tr>
-            </thead>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">CNP</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Study Year</th>
+                <th scope="col">Details</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
 
-            <tbody>
-                {% for p in students %}
-                        <tr>
-                            <th scope="row">{{p.0}}</th>
-                            <td>{{p.1}}</td>
-                            <td><a class="row clickable" href="#"> {{p.2}}</a></td>
-                            <td>{{p.4}}</td>
-                            <td>{{p.5}}</td>
-                            <td>{{p.10}}</td>
-                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{url_for('single_student', stud_id=p.0)}}">Details</a> </td>
-                            <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{url_for('delete_student', stud_id=p.0, criterion='all')}}">Delete</a> </td>
-                        </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        </div>
+        <tbody>
+            {% for p in students %}
+                    <tr>
+                        <th scope="row">{{p.0}}</th>
+                        <td>{{p.1}}</td>
+                        <td><a class="row clickable" href="#"> {{p.2}}</a></td>
+                        <td>{{p.4}}</td>
+                        <td>{{p.5}}</td>
+                        <td>{{p.10}}</td>
+                        <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{url_for('single_student', stud_id=p.0)}}">Details</a> </td>
+                        <td><a class="btn btn-sm" style="background-color:rgb(0,75,93); color:whitesmoke" href="{{url_for('delete_student', stud_id=p.0, criterion='all')}}">Delete</a> </td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
 </div>
 {% endblock content %}

@@ -1,48 +1,47 @@
 {% extends "layout.html" %}
 {% block content %}
-
-    <div class="parent container-fluid h-100 d-flex justify-content-center align-items-center">
-        <div class="row d-flex justify-content-between text-center">
-            <div class="col-md-3">
-                <div class="card" style="width: 300px;">
-                    <img src="..\static\images\depts.png" alt="Departments" class="card-img-top">
-                    <div class="card-body">
-                        <a class="classWithPad clickable" href="/dashboard_admin/manage_departments">
-                            <h4> Manage Departments</h4>
-                        </a>
-                    </div>
+<div class="parent container-fluid h-100 d-flex justify-content-center align-items-center">
+    <div class="row d-flex justify-content-between text-center">
+        <div class="col-md-3">
+            <div class="card" style="width: 300px;">
+                <img src="..\static\images\depts.png" alt="Departments" class="card-img-top">
+                <div class="card-body">
+                    <a class="classWithPad clickable" href="/dashboard_admin/manage_departments">
+                        <h4> Manage Departments</h4>
+                    </a>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card" style="width: 300px;">
-                    <img src="..\static\images\prof1.png" alt="Professors" class="card-img-top">
-                    <div class="card-body">
-                        <a class="classWithPad clickable" href="{{ url_for('manage_professors') }}">
-                            <h4> Manage Professors </h4>
-                        </a>
-                    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card" style="width: 300px;">
+                <img src="..\static\images\prof1.png" alt="Professors" class="card-img-top">
+                <div class="card-body">
+                    <a class="classWithPad clickable" href="{{ url_for('manage_professors') }}">
+                        <h4> Manage Professors </h4>
+                    </a>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card" style="width: 300px;">
-                    <img src="..\static\images\courses.png" alt="Professors" class="card-img-top">
-                    <div class="card-body">
-                        <a class="classWithPad clickable" href="{{ url_for('manage_courses') }}">
-                            <h4>Manage Courses</h4>
-                        </a>
-                    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card" style="width: 300px;">
+                <img src="..\static\images\courses.png" alt="Professors" class="card-img-top">
+                <div class="card-body">
+                    <a class="classWithPad clickable" href="{{ url_for('manage_courses') }}">
+                        <h4>Manage Courses</h4>
+                    </a>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card" style="width: 300px;">
-                    <img src="..\static\images\stud.png" alt="Professors" class="card-img-top">
-                    <div class="card-body">
-                        <a class="classWithPad clickable" href="{{ url_for('manage_students') }}">
-                            <h4>Manage Students</h4>
-                        </a>
-                    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card" style="width: 300px;">
+                <img src="..\static\images\stud.png" alt="Professors" class="card-img-top">
+                <div class="card-body">
+                    <a class="classWithPad clickable" href="{{ url_for('manage_students') }}">
+                        <h4>Manage Students</h4>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock content %}
