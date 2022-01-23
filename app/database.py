@@ -168,6 +168,10 @@ class OracleConnection:
 
     def addProfessor(self, cnp, fn, ln, bd, phone, email, gen, dept):
         try:
+            if gen == 'M':
+                gen = 'male'
+            elif gen == 'F':
+                gen = 'female'
             self.cursor.callproc("procedures_pck.addProfessor", (0, cnp, fn, ln, bd, phone, email, 'professor', gen, dept))
             self.db.commit()
             return True

@@ -148,7 +148,7 @@ def single_professor(prof_id):
 def delete_course_prof(prof_id, course_id):
     with DBC() as db:
         db.removeCourseProf(prof_id, course_id)
-    flash('Course deleted successfully from professor\'s teachig list', 'success')
+        flash('Course deleted successfully from professor\'s teachig list', 'success')
     return redirect(url_for('single_professor', prof_id=prof_id))
 
 
@@ -295,6 +295,7 @@ def update_student_course(stud_id, course_id):
 def delete_student_course(stud_id, course_id):
     with DBC() as db:
         db.removeCourseStudent(stud_id, course_id)
+        flash("Course deleted successfully", "success")
     return redirect(url_for('single_student', stud_id=stud_id))
 
 
